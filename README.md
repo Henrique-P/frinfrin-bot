@@ -1,1 +1,11 @@
 # frinfrin-bot
+
+
+Template for .env file:
+
+TOKEN=XXXXXX
+WEBHOOK_TOKEN=XXXXXX
+WEBHOOK_URL=XXXXXX:
+PORT=XXXX
+KEY_PATH=ssl\XXXX.key
+CERT_PATH=ssl\XXXX.pem
