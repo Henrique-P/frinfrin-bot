@@ -1,11 +1,11 @@
 from random import randint
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import CallbackContext
-import logging
+#import logging
   
 async def rps(update: Update, context: CallbackContext):
     user =  update.effective_user.full_name
-    logging.info("%s is playing RPS", user)
+    #logging.info("%s is playing RPS", user)
     query = update.callback_query
     #replies the query
     await query.answer()
