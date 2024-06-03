@@ -2,11 +2,11 @@ import logging, requests
 from re import sub
 from telegram import Update
 from telegram.ext import CommandHandler, CallbackContext, Application, MessageHandler, filters, CallbackQueryHandler
-from os import getenv
+from os import getenv, environ
 from game import rps, rpsStart
 from dotenv import load_dotenv
 
-if 'TOKEN' not in os.environ:
+if 'TOKEN' not in environ:
     load_dotenv()
 
 TOKEN = getenv('TOKEN')
