@@ -2,19 +2,19 @@ import logging, requests
 from re import sub
 from telegram import Update
 from telegram.ext import CommandHandler, CallbackContext, Application, MessageHandler, filters, CallbackQueryHandler
-import os
+from os import getenv
 from game import rps, rpsStart
 from dotenv import load_dotenv
 
 if 'TOKEN' not in os.environ:
     load_dotenv()
 
-TOKEN = os.getenv('TOKEN')
-WEBHOOK_TOKEN = os.getenv('WEBHOOK_TOKEN')
-WEBHOOK_URL = os.getenv('WEBHOOK_URL')
-PORT = os.getenv('PORT')
-KEY_PATH = os.getenv('KEY_PATH')
-CERT_PATH = os.getenv('CERT_PATH')
+TOKEN = getenv('TOKEN')
+WEBHOOK_TOKEN = getenv('WEBHOOK_TOKEN')
+WEBHOOK_URL = getenv('WEBHOOK_URL')
+PORT = getenv('PORT')
+KEY_PATH = getenv('KEY_PATH')
+CERT_PATH = getenv('CERT_PATH')
 
 trackerRegexPattern = r'&?si=[^&]*|&?igsh=[^&]*'
 
