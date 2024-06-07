@@ -1,6 +1,5 @@
 import requests
 from re import sub
-from bot import trackerRegexPattern
 
 trackerRegexPattern = r'si=[^&]*&?|igsh=[^&]*&?'
 
