@@ -1,7 +1,7 @@
 import logging
 from re import search
 from telegram import InlineQueryResultArticle, InputTextMessageContent, Update
-from telegram.ext import CommandHandler, CallbackContext, Application, MessageHandler, filters, CallbackQueryHandler, InlineQueryHandler
+from telegram.ext import CommandHandler, CallbackContext, Application, MessageHandler, filters, InlineQueryHandler
 import os
 # from game import rps, rpsStart
 from dotenv import load_dotenv
