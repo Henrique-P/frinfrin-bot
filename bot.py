@@ -5,7 +5,7 @@ from telegram.ext import CommandHandler, CallbackContext, Application, MessageHa
 import os
 # from game import rps, rpsStart
 from dotenv import load_dotenv
-from linkEmbedding import twitter, tiktok, insta, trackerRemoval
+from linkEmbedding import twitter, tiktok, insta, furAffinity, trackerRemoval
 
 if 'TOKEN' not in os.environ:
     load_dotenv()
@@ -69,6 +69,9 @@ async def privateMessage(update: Update, context: CallbackContext) -> None:
     elif search(r'instagram\.com/reel/.+', message):
         response = insta(message)
         logging.info("DDInstagram Request by %s", user)
+    elif search(r'furaffinity\.net/view/.+', message):
+        response = furAffinity(message)
+        logging.info("FxFurAffinity Request by %s", user)
     elif search(trackerRegexPattern, message):
         response = trackerRemoval(message)
         logging.info("Generic Tracker Removal Request by %s", user)

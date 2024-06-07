@@ -2,8 +2,8 @@ import requests
 from re import sub
 from bot import trackerRegexPattern
 
-def twitter(message: str):
-    postLink = message.split(".com/", 1)[1]
+def twitter(originalLink: str):
+    postLink = originalLink.split(".com/", 1)[1]
     postLink = postLink.split("?")[0]
     instantViewLink = "https://i.fixupx.com/" + postLink
     apiLink = "https://api.fxtwitter.com/" + postLink
@@ -13,8 +13,8 @@ def twitter(message: str):
     else:
         return instantViewLink
 
-def tiktok(message: str):
-    postLink = message.split(".com/", 1)[1]
+def tiktok(originalLink: str):
+    postLink = originalLink.split(".com/", 1)[1]
     postLink = postLink.split("?")[0]
     finalLink = "https://fixuptiktok.com/" + postLink
     apiLink = "https://api.fxtiktok.com/" + postLink
@@ -24,12 +24,17 @@ def tiktok(message: str):
     else:
         return finalLink
 
-def insta(message: str):
-    postLink = message.split(".com/reel/", 1)[1]
+def insta(originalLink: str):
+    postLink = originalLink.split(".com/reel/", 1)[1]
     postLink = postLink.split("?")[0]
     finalLink = "https://ddinstagram.com/reel/" + postLink
     return finalLink
 
-def trackerRemoval(message: str):
-    cleanLink = sub(trackerRegexPattern,"", message)
+def furAffinity(originalLink: str):
+    postLink = originalLink.split(".net/view/", 1)[1]
+    finalLink = "https://www.fxfuraffinity.net/view/" + postLink
+    return finalLink
+
+def trackerRemoval(originalLink: str):
+    cleanLink = sub(trackerRegexPattern,"", originalLink)
     return cleanLink
