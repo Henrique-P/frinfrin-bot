@@ -2,6 +2,8 @@ import requests
 from re import sub
 from bot import trackerRegexPattern
 
+trackerRegexPattern = r'si=[^&]*&?|igsh=[^&]*&?'
+
 def twitter(originalLink: str):
     postLink = originalLink.split(".com/", 1)[1]
     postLink = postLink.split("?")[0]

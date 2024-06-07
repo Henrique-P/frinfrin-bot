@@ -5,7 +5,7 @@ from telegram.ext import CommandHandler, CallbackContext, Application, MessageHa
 import os
 # from game import rps, rpsStart
 from dotenv import load_dotenv
-from linkEmbedding import twitter, tiktok, insta, furAffinity, trackerRemoval
+from linkEmbedding import twitter, tiktok, insta, furAffinity, trackerRemoval, trackerRegexPattern
 
 if 'TOKEN' not in os.environ:
     load_dotenv()
@@ -17,7 +17,7 @@ PORT = os.getenv('PORT')
 KEY_PATH = os.getenv('KEY_PATH', None)
 CERT_PATH = os.getenv('CERT_PATH', None)
 
-trackerRegexPattern = r'si=[^&]*&?|igsh=[^&]*&?'
+
 
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
