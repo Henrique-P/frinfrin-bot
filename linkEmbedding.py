@@ -37,4 +37,5 @@ def furAffinity(originalLink: str):
 
 def trackerRemoval(originalLink: str):
     cleanLink = sub(trackerRegexPattern,"", originalLink)
+    cleanLink = sub(r'\?$','', cleanLink)
     return cleanLink

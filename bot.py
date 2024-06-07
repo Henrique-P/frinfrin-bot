@@ -17,7 +17,7 @@ PORT = os.getenv('PORT')
 KEY_PATH = os.getenv('KEY_PATH', None)
 CERT_PATH = os.getenv('CERT_PATH', None)
 
-trackerRegexPattern = r'&?si=[^&]*|&?igsh=[^&]*'
+trackerRegexPattern = r'si=[^&]*&?|igsh=[^&]*&?'
 
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
