@@ -71,7 +71,7 @@ async def inlineMessage(update: Update, context: CallbackContext) -> None:
         response = insta(query)
         thumbUrl = ''
         title = "Instagram"
-        addToRegistry("linkInstagram", user)
+        addToRegistry("linkInsta", user)
         # logging.info("DDInstagram Request by %s", user)
     elif search(r'furaffinity\.net/view/.+', query):
         response = furAffinity(query)
@@ -109,7 +109,7 @@ async def privateMessage(update: Update, context: CallbackContext) -> None:
         # logging.info("FxTikTok Request by %s", user)
     elif search(r'instagram\.com/reel/.+', message):
         response = insta(message)
-        addToRegistry("linkInstagram", user)
+        addToRegistry("linkInsta", user)
         # logging.info("DDInstagram Request by %s", user)
     elif search(r'furaffinity\.net/view/.+', message):
         response = furAffinity(message)
