@@ -61,7 +61,7 @@ async def inlineMessage(update: Update, context: CallbackContext) -> None:
         title = "X"
         # logging.info("FxTwitter Request by %s", user)
         addToRegistry("linkX", user)
-    elif search(r'tiktok\.com/(@.+/video/|t/).+',query):
+    elif search(r'tiktok\.com/.+',query):
         response = tiktok(query)
         thumbUrl = ''
         title = "TikTok"
@@ -103,7 +103,7 @@ async def privateMessage(update: Update, context: CallbackContext) -> None:
         response = twitter(message)
         addToRegistry("linkX", user)
         # logging.info("FxTwitter Request by %s", user)
-    elif search(r'tiktok\.com/(@.+/video/|t/)', message):
+    elif search(r'tiktok\.com/.+', message):
         response = tiktok(message)
         addToRegistry("linkTikTok", user)
         # logging.info("FxTikTok Request by %s", user)
@@ -131,6 +131,9 @@ async def privateMessage(update: Update, context: CallbackContext) -> None:
     elif not response:
         addToRegistry("qa", user)
         await update.message.reply_text("Here's your link:\nhttps://youtu.be/dQw4w9WgXcQ", disable_web_page_preview=True)
+        return
+    elif response == -1:
+        await update.message.reply_text("This URL might be invalid.")
         return
     
     await update.message.reply_text("Here's your link:")
