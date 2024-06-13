@@ -1,18 +1,16 @@
 import requests
-from re import sub
+import re
 
 trackerRegexPattern = r'si=[^&]*&?|igsh=[^&]*&?'
 
 def twitter(originalLink: str):
-    postLink = originalLink.split(".com/", 1)[1]
-    postLink = postLink.split("?")[0]
-    instantViewLink = "https://i.fixupx.com/" + postLink
+    postLink = re.search(r'[^/]+/status/[0-9]+', originalLink).group()
     apiLink = "https://api.fxtwitter.com/" + postLink
     statusCode = requests.get(apiLink).status_code
-    if statusCode == 404:
+    if statusCode != 200:
         return -1
     else:
-        return instantViewLink
+        return "https://i.fixupx.com/" + postLink
 
 def tiktok(originalLink: str):
     if originalLink.find('vm.') != -1 or originalLink.find('com/t/') != -1:
@@ -40,6 +38,6 @@ def furAffinity(originalLink: str):
     return finalLink
 
 def trackerRemoval(originalLink: str):
-    cleanLink = sub(trackerRegexPattern,"", originalLink)
-    cleanLink = sub(r'\?$','', cleanLink)
+    cleanLink = re.sub(trackerRegexPattern,"", originalLink)
+    cleanLink = re.sub(r'\?$','', cleanLink)
     return cleanLink
