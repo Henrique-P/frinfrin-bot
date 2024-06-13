@@ -103,7 +103,7 @@ async def privateMessage(update: Update, context: CallbackContext) -> None:
         response = twitter(message)
         addToRegistry("linkX", user)
         # logging.info("FxTwitter Request by %s", user)
-    elif search(r'tiktok\.com/@.+/video/.+', message):
+    elif search(r'tiktok\.com/(@.+/video/|t/)', message):
         response = tiktok(message)
         addToRegistry("linkTikTok", user)
         # logging.info("FxTikTok Request by %s", user)
