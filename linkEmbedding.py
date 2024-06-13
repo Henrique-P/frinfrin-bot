@@ -10,20 +10,23 @@ def twitter(originalLink: str):
     apiLink = "https://api.fxtwitter.com/" + postLink
     statusCode = requests.get(apiLink).status_code
     if statusCode == 404:
-        return 0
+        return -1
     else:
         return instantViewLink
 
 def tiktok(originalLink: str):
-    postLink = originalLink.split(".com/", 1)[1]
+    if originalLink.find('vm.') != -1 or originalLink.find('com/t/') != -1:
+        response = requests.get(originalLink)
+        if response.history:
+            hydratedLink = response.url
+        else:
+            return -1
+    else:
+        hydratedLink = originalLink
+    postLink = hydratedLink.split(".com/", 1)[1]
     postLink = postLink.split("?")[0]
     finalLink = "https://fixuptiktok.com/" + postLink
-    apiLink = "https://api.fxtiktok.com/" + postLink
-    statusCode = requests.get(apiLink).status_code
-    if statusCode == 404:
-        return 0
-    else:
-        return finalLink
+    return finalLink
 
 def insta(originalLink: str):
     postLink = originalLink.split(".com/reel/", 1)[1]
