@@ -10,7 +10,7 @@ def twitter(originalLink: str):
     if statusCode != 200:
         return -1
     else:
-        return "https://i.fixupx.com/" + postLink
+        return "https://fixupx.com/" + postLink
 
 def tiktok(originalLink: str):
     if originalLink.find('vm.') != -1 or originalLink.find('com/t/') != -1:
