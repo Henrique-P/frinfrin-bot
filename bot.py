@@ -61,7 +61,7 @@ async def inlineMessage(update: Update, context: CallbackContext) -> None:
         title = "X"
         # logging.info("FxTwitter Request by %s", user)
         addToRegistry("linkX", user)
-    elif search(r'tiktok\.com/@.+/video/.+',query):
+    elif search(r'tiktok\.com/(@.+/video/|t/).+',query):
         response = tiktok(query)
         thumbUrl = ''
         title = "TikTok"
