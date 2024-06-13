@@ -87,9 +87,7 @@ async def inlineMessage(update: Update, context: CallbackContext) -> None:
         # logging.info("Generic Tracker Removal Request by %s", user)
     else:
         return
-    if query == response:
-        return
-    elif not response:
+    if not response or response == -1 or response == query:
         return
     answer = [InlineQueryResultArticle(response, title, InputTextMessageContent(response), thumbnail_url=thumbUrl, description='Send embed, trackerless link')]
     await update.inline_query.answer(answer)
