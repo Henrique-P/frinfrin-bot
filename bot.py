@@ -55,7 +55,7 @@ async def inlineMessage(update: Update, context: CallbackContext) -> None:
     user = update.inline_query.from_user.id
     if not query:
         return
-    if search(r'(twitter|x)\.com/.+/status/.+',query):
+    if search(r'(twitter|x)\.com/.+/status/[0-9]+',query):
         response = twitter(query)
         thumbUrl = 'https://cdn.freelogovectors.net/wp-content/uploads/2023/07/twitter-x-logo-freelogovectors.net_.png'
         title = "X"
@@ -99,7 +99,7 @@ async def privateMessage(update: Update, context: CallbackContext) -> None:
     user = update.effective_user.id
     if not message:
         return
-    if search(r'(twitter|x)\.com/.+/status/.+', message):
+    if search(r'(twitter|x)\.com/.+/status/[0-9]+', message):
         response = twitter(message)
         addToRegistry("linkX", user)
         # logging.info("FxTwitter Request by %s", user)
@@ -133,7 +133,7 @@ async def privateMessage(update: Update, context: CallbackContext) -> None:
         await update.message.reply_text("Here's your link:\nhttps://youtu.be/dQw4w9WgXcQ", disable_web_page_preview=True)
         return
     elif response == -1:
-        await update.message.reply_text("This URL might be invalid.")
+        await update.message.reply_text("This URL is either invalid or the content is private.")
         return
     
     await update.message.reply_text("Here's your link:")
