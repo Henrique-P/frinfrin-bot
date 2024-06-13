@@ -23,6 +23,8 @@ def tiktok(originalLink: str):
         hydratedLink = originalLink
     postLink = hydratedLink.split(".com/", 1)[1]
     postLink = postLink.split("?")[0]
+    if not postLink:
+        return -1
     finalLink = "https://fixuptiktok.com/" + postLink
     return finalLink
 
