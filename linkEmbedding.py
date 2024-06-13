@@ -13,20 +13,14 @@ def twitter(originalLink: str):
         return "https://fixupx.com/" + postLink
 
 def tiktok(originalLink: str):
-    if originalLink.find('vm.') != -1 or originalLink.find('com/t/') != -1:
+    if re.search(r'vm\.tiktok\.com/.+|tiktok\.com/t/.+',originalLink):
         response = requests.get(originalLink)
-        if response.history:
-            hydratedLink = response.url
-        else:
-            return -1
+        postLink = re.search(r'@[^/]+/video/[0-9]+', response.url)
     else:
-        hydratedLink = originalLink
-    postLink = hydratedLink.split(".com/", 1)[1]
-    postLink = postLink.split("?")[0]
+        postLink = re.search(r'@[^/]+/video/[0-9]+', originalLink)
     if not postLink:
         return -1
-    finalLink = "https://fixuptiktok.com/" + postLink
-    return finalLink
+    return "https://fixuptiktok.com/" + postLink.group()
 
 def insta(originalLink: str):
     postLink = originalLink.split(".com/reel/", 1)[1]
