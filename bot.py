@@ -15,8 +15,9 @@ WEBHOOK_URL = os.getenv('WEBHOOK_URL')
 PORT = os.getenv('PORT')
 KEY_PATH = os.getenv('KEY_PATH', None)
 CERT_PATH = os.getenv('CERT_PATH', None)
-STANDARD_MOTD = 'Hello! Send me a Twitter, TikTok, Instagram or Furaffinity link for a preview-able link. You can also send me Youtube, Spotify or other links that contains trackers so I can remove them for you.\nIf you want to include a tracker pattern in my search please message @Yolfrin.'
+STANDARD_MOTD = 'Hello! Send me a Twitter, TikTok, Instagram or Furaffinity link for a preview-able link.\n\nYou can also send me Youtube, Spotify or other links that contains trackers so I can remove them for you.\n\nIf you want to include a tracker pattern in my search please message @Yolfrin.'
 MOTD = os.getenv('MOTD', STANDARD_MOTD)
+
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
 )
@@ -83,7 +84,6 @@ async def privateMessage(update: Update, context: CallbackContext) -> None:
     elif response == -1:
         await update.message.reply_text("This URL is either invalid or the content is private.")
         return
-    
     await update.message.reply_text("Here's your link:")
     await update.message.reply_text(response)
 
@@ -97,6 +97,5 @@ def main() -> None:
     else:
         application.run_webhook(listen='0.0.0.0', port=PORT, secret_token=WEBHOOK_TOKEN, key=KEY_PATH, cert=CERT_PATH, webhook_url=WEBHOOK_URL+PORT)
     
-
 if __name__ == '__main__':
     main()
