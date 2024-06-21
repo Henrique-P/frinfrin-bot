@@ -40,7 +40,7 @@ async def start(update: Update, context: CallbackContext) -> None:
     user =  update.effective_user.id
     # logging.info("%s started the bot", user)
     addToRegistry("commandStart", user)
-    await update.message.reply_text("Hello! Send me a Twitter, TikTok or Instagram link.")
+    await update.message.reply_text("Hello! Send me a Twitter, TikTok, Instagram or Furaffinity link for a preview-able link. You can also send me Youtube, Spotify or other links that contains trackers so I can remove them for you.\nIf you want to include a tracker pattern in my search please message @Yolfrin.")
     
 async def log(update: Update, context: CallbackContext) -> None:
     user =  update.effective_user.id
