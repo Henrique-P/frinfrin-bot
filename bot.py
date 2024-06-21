@@ -15,14 +15,15 @@ WEBHOOK_URL = os.getenv('WEBHOOK_URL')
 PORT = os.getenv('PORT')
 KEY_PATH = os.getenv('KEY_PATH', None)
 CERT_PATH = os.getenv('CERT_PATH', None)
-
+STANDARD_MOTD = 'Hello! Send me a Twitter, TikTok, Instagram or Furaffinity link for a preview-able link. You can also send me Youtube, Spotify or other links that contains trackers so I can remove them for you.\nIf you want to include a tracker pattern in my search please message @Yolfrin.'
+MOTD = os.getenv('MOTD', STANDARD_MOTD)
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
 )
 logger = logging.getLogger(__name__)
 
 async def start(update: Update, context: CallbackContext) -> None:
-    await update.message.reply_text("Hello! Send me a Twitter, TikTok, Instagram or Furaffinity link for a preview-able link. You can also send me Youtube, Spotify or other links that contains trackers so I can remove them for you.\nIf you want to include a tracker pattern in my search please message @Yolfrin.")
+    await update.message.reply_text(MOTD)
         
 async def inlineMessage(update: Update, context: CallbackContext) -> None:
     query = update.inline_query.query
