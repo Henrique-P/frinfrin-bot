@@ -15,8 +15,10 @@ WEBHOOK_URL = os.getenv('WEBHOOK_URL')
 PORT = os.getenv('PORT')
 KEY_PATH = os.getenv('KEY_PATH', None)
 CERT_PATH = os.getenv('CERT_PATH', None)
-STANDARD_MOTD = 'Hello! Send me a Twitter, TikTok, Instagram or Furaffinity link for a preview-able link.\n\nYou can also send me Youtube, Spotify or other links that contains trackers so I can remove them for you.\n\nIf you want to include a tracker pattern in my search please message @Yolfrin.'
-MOTD = os.getenv('MOTD', STANDARD_MOTD)
+STANDARD_MOTD_EN = 'Hello! Send me a Twitter, TikTok, Instagram or Furaffinity link for a preview-able link.\n\nYou can also send me Youtube, Spotify or other links that contains trackers so I can remove them for you.\n\nIf you want to include a tracker pattern in my search please message @Yolfrin.'
+STANDARD_MOTD_BR = 'Oi! Me envie um link do Twitter, Tiktok, Instagram ou Furaffinity e eu te devolvo um link com preview.\n\nVocê também pode me enviar links do Youtube, Spotify ou outros links que contém rastreadores e eu os removerei para você.\n\nCaso queira adicionar um rastreador à minha busca contate @Yolfrin.\n\nNota:Tradução PT-BR em andamento.'
+MOTD_EN = os.getenv('MOTD', STANDARD_MOTD_EN)
+MOTD_BR = os.getenv('MOTD', STANDARD_MOTD_BR)
 
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
@@ -24,7 +26,12 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 async def start(update: Update, context: CallbackContext) -> None:
-    await update.message.reply_text(MOTD)
+    userLang= update.effective_user.language_code
+    if userLang.startswith('pt'):
+        await update.message.reply_text(MOTD_BR)
+    else:
+        await update.message.reply_text(MOTD_EN)
+    
         
 async def inlineMessage(update: Update, context: CallbackContext) -> None:
     query = update.inline_query.query
