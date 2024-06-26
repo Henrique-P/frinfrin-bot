@@ -4,7 +4,8 @@ from telegram import InlineQueryResultArticle, InputTextMessageContent, Update
 from telegram.ext import CommandHandler, CallbackContext, Application, MessageHandler, filters, InlineQueryHandler
 import os
 from dotenv import load_dotenv
-from linkEmbedding import twitter, tiktok, insta, furAffinity, trackerRemoval, trackerRegexPattern
+from languages import sendTranslatedMessage
+from linkEmbedding import inlineFurAffinity, inlineInsta, inlineTiktok, inlineTrackerRemoval, inlineTwitter, twitter, tiktok, insta, furAffinity, trackerRemoval, trackerRegexPattern
 
 if 'TOKEN' not in os.environ:
     load_dotenv()
@@ -15,10 +16,6 @@ WEBHOOK_URL = os.getenv('WEBHOOK_URL')
 PORT = os.getenv('PORT')
 KEY_PATH = os.getenv('KEY_PATH', None)
 CERT_PATH = os.getenv('CERT_PATH', None)
-STANDARD_MOTD_EN = 'Hello! Send me a Twitter, TikTok, Instagram or Furaffinity link for a preview-able link.\n\nYou can also send me Youtube, Spotify or other links that contains trackers so I can remove them for you.\n\nIf you want to include a tracker pattern in my search please message @Yolfrin.'
-STANDARD_MOTD_BR = 'Oi! Me envie um link do Twitter, Tiktok, Instagram ou Furaffinity e eu te devolvo um link com preview.\n\nVocê também pode me enviar links do Youtube, Spotify ou outros links que contém rastreadores e eu os removerei para você.\n\nCaso queira adicionar um rastreador à minha busca contate @Yolfrin.\n\nNota:Tradução PT-BR em andamento.'
-MOTD_EN = os.getenv('MOTD', STANDARD_MOTD_EN)
-MOTD_BR = os.getenv('MOTD', STANDARD_MOTD_BR)
 
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
@@ -26,73 +23,41 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 async def start(update: Update, context: CallbackContext) -> None:
-    userLang= update.effective_user.language_code
-    if userLang.startswith('pt'):
-        await update.message.reply_text(MOTD_BR)
-    else:
-        await update.message.reply_text(MOTD_EN)
-    
-        
+    await sendTranslatedMessage(update,'motd')
+
 async def inlineMessage(update: Update, context: CallbackContext) -> None:
     query = update.inline_query.query
     if not query:
         return
     if search(r'(twitter|x)\.com/.+/status/[0-9]+',query):
-        response = twitter(query)
-        thumbUrl = 'https://cdn.freelogovectors.net/wp-content/uploads/2023/07/twitter-x-logo-freelogovectors.net_.png'
-        title = "X"
+        await inlineTwitter(update)
     elif search(r'tiktok\.com/.+',query):
-        response = tiktok(query)
-        thumbUrl = ''
-        title = "TikTok"
+        await inlineTiktok(update)
     elif search(r'instagram\.com/reel/.+', query):
-        response = insta(query)
-        thumbUrl = ''
-        title = "Instagram"
+        await inlineInsta(update)
     elif search(r'furaffinity\.net/view/.+', query):
-        response = furAffinity(query)
-        thumbUrl = 'https://logos-world.net/wp-content/uploads/2024/02/FurAffinity-Logo-500x281.png'
-        title = "FurAffinity"
+        await inlineFurAffinity(update)
     elif search(trackerRegexPattern, query):
-        response = trackerRemoval(query)
-        thumbUrl = ''
-        title = "Tracker Removed"
+        await inlineTrackerRemoval(update)
     else:
         return
-    if not response or response == -1 or response == query:
-        return
-    answer = [InlineQueryResultArticle(response, title, InputTextMessageContent(response), thumbnail_url=thumbUrl, description='Send embed, trackerless link')]
-    await update.inline_query.answer(answer)
         
 async def privateMessage(update: Update, context: CallbackContext) -> None:
     message = update.message.text
     if not message:
         return
     if search(r'(twitter|x)\.com/.+/status/[0-9]+', message):
-        response = twitter(message)
+        await twitter(update)
     elif search(r'tiktok\.com/.+', message):
-        response = tiktok(message)
+        await tiktok(update)
     elif search(r'instagram\.com/reel/.+', message):
-        response = insta(message)
+        await insta(update)
     elif search(r'furaffinity\.net/view/.+', message):
-        response = furAffinity(message)
+        await furAffinity(update)
     elif search(trackerRegexPattern, message):
-        response = trackerRemoval(message)
+        await trackerRemoval(update)
     else:
-        await update.message.reply_text("Message not recognized. Try sending me a Instagram, Twitter, Furaffinity or TikTok link and I will embed and/or remove any trackers.")
-        return
-    if message == response:
-        await update.message.reply_text("Nothing to do with this link.")
-        await update.message.reply_sticker("CAACAgEAAxkBAAECSm9mXAHqyk3h8vkRx7ucxyF6qQppkAACuQIAAh9lSEfeZwF56Y_N9DUE")
-        return
-    elif not response:
-        await update.message.reply_text("Here's your link:\nhttps://youtu.be/dQw4w9WgXcQ", disable_web_page_preview=True)
-        return
-    elif response == -1:
-        await update.message.reply_text("This URL is either invalid or the content is private.")
-        return
-    await update.message.reply_text("Here's your link:")
-    await update.message.reply_text(response)
+        await sendTranslatedMessage(update,'unknownMessage')
 
 def main() -> None:
     application = Application.builder().token(TOKEN).build()
