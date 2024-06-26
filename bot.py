@@ -91,8 +91,6 @@ async def privateMessage(update: Update, context: CallbackContext) -> None:
     elif response == -1:
         await update.message.reply_text("This URL is either invalid or the content is private.")
         return
-    
-    await update.message.reply_text("Here's your link:")
     await update.message.reply_text(response)
 
 def main() -> None:
