@@ -28,4 +28,4 @@ class UsageStatistics:
 
     def getFormattedStatistics(self):
         stats = self.getStatistics()
-        return f"Boot Time: {stats['bootTime'].strftime("%c")}\nSystem Time: {stats['currentTime'].strftime("%c")}\nTotal requests recorded: {stats['total_events']}\nRequests in the last 24 hours(since {stats['logCut'].strftime("%c")}): {stats['events_last_24h']}"
+        return f"Boot Time: {stats['bootTime'].strftime("%c")}\nSystem Time: {stats['currentTime'].strftime("%c")}\nTotal requests recorded: {stats['total_events']}\nRequests in the last 24 hours-since {stats['logCut'].strftime("%c")}: {stats['events_last_24h']}"
