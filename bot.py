@@ -1,5 +1,6 @@
 import logging
 import re
+import requests
 from telegram import InlineQueryResultArticle, InputTextMessageContent, Update
 from telegram.ext import CommandHandler, CallbackContext, Application, MessageHandler, filters, InlineQueryHandler
 import os
@@ -16,6 +17,8 @@ WEBHOOK_URL = os.getenv('WEBHOOK_URL')
 PORT = os.getenv('PORT')
 KEY_PATH = os.getenv('KEY_PATH', None)
 CERT_PATH = os.getenv('CERT_PATH', None)
+PING_URL = os.getenv('PING_URL', None)
+
 customLog = userStats.UsageStatistics()
 
 logging.basicConfig(
@@ -93,8 +96,12 @@ async def privateMessage(update: Update, context: CallbackContext) -> None:
         return
     await update.message.reply_text(response)
 
+async def healthPing(context: CallbackContext):
+    requests.get(PING_URL)
+
 def main() -> None:
     application = Application.builder().token(TOKEN).build()
+    application.job_queue.run_repeating(healthPing, interval=60, first=10)
     application.add_handler(CommandHandler("start", start))
     application.add_handler(CommandHandler("log", log))
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, privateMessage))
