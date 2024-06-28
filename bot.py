@@ -109,11 +109,12 @@ async def privateMessage(update: Update, context: CallbackContext) -> None:
     await update.message.reply_text(response)
 
 async def healthPing(context: CallbackContext):
-    requests.get(PING_URL)
+    requests.get(PING_URL, timeout=1)
 
 def main() -> None:
     application = Application.builder().token(TOKEN).build()
-    #application.job_queue.run_repeating(healthPing, interval=60, first=10)
+    if PING_URL:
+            application.job_queue.run_repeating(healthPing, interval=60, first=10)
     application.add_handler(CommandHandler("start", start))
     application.add_handler(CommandHandler("help", help))
     application.add_handler(CommandHandler("support", support))
