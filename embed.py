@@ -1,3 +1,4 @@
+import re
 import requests
 from telegram import InlineQueryResultArticle, InputTextMessageContent, Update
 from telegram.ext import CallbackContext
@@ -16,24 +17,25 @@ async def twitter(update: Update, context: CallbackContext):
     apiLink = f"https://api.fxtwitter.com/{userHandle}/status/{postId}"
     composed = f"{prefix}{domain}/{userHandle}/status/{postId}"
     isPostOK = requests.get(apiLink).status_code == 200
-    if update.inline_query:
-        if not isPostOK:
-            return
-        thumbUrl = 'https://cdn.freelogovectors.net/wp-content/uploads/2023/07/twitter-x-logo-freelogovectors.net_.png'
-        title = "Post Found"
-        description = 'Send this Twitter link!'
-        answer = [InlineQueryResultArticle(composed, title, InputTextMessageContent(composed), thumbnail_url=thumbUrl, description=description)]
-        await update.inline_query.answer(answer)
-    elif update.message.text:
-        if not isPostOK:
-            await update.message.reply_text("This URL is either invalid or the content is private.")
-        else:
-            await update.message.reply_text(composed)
+    if not isPostOK:
+        await update.message.reply_text("This URL is either invalid or the content is private.")
+    else:
+        await update.message.reply_text(composed)
+            
+# if update.inline_query:
+#         if not isPostOK:
+#             return
+#         thumbUrl = 'https://cdn.freelogovectors.net/wp-content/uploads/2023/07/twitter-x-logo-freelogovectors.net_.png'
+#         title = "Post Found"
+#         description = 'Send this Twitter link!'
+#         answer = [InlineQueryResultArticle(composed, title, InputTextMessageContent(composed), thumbnail_url=thumbUrl, description=description)]
+#         await update.inline_query.answer(answer)
+#     el
 
 def tiktok(update: Update, context: CallbackContext):
     if re.search(r'vm\.tiktok\.com/.+|tiktok\.com/t/.+',originalLink):
-        response = requests.get(originalLink)
-        postLink = re.search(r'@[^/]+/video/[0-9]+', response.url)
+        requests.get(originalLink)
+        postLink = re.search(r'@[^/]+/video/[0-9]+', l)
     else:
         postLink = re.search(r'@[^/]+/video/[0-9]+', originalLink)
     if not postLink:

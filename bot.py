@@ -1,7 +1,7 @@
 import logging
 import re
 import requests
-from telegram import InlineQueryResultArticle, InputTextMessageContent, Update
+from telegram import Update
 from telegram.ext import CommandHandler, CallbackContext, Application, MessageHandler, filters, InlineQueryHandler
 import os
 import dotenv
@@ -121,11 +121,11 @@ def main() -> None:
     application.add_handler(CommandHandler("support", support))
     application.add_handler(CommandHandler("log", log))
     application.add_handler(CommandHandler("privacy", privacy))
-    application.add_handler(MessageHandler(filters.TEXT & filters.Regex(r'(twitter|x)\.com/.+/status/[0-9]+'), embed.twitter))
-    application.add_handler(MessageHandler(filters.TEXT & filters.Regex(r'tiktok\.com/.+'), embed.tiktok))
-    application.add_handler(MessageHandler(filters.TEXT & filters.Regex(r'instagram\.com/reel/.+'), embed.insta))
-    application.add_handler(MessageHandler(filters.TEXT & filters.Regex(r'furaffinity\.net/view/.+'), embed.furAffinity))
-    application.add_handler(InlineQueryHandler(embed.twitter, r'(twitter|x)\.com/.+/status/[0-9]+$'))
+    application.add_handler(MessageHandler(filters.Regex(r'(twitter|x)\.com/.+/status/[0-9]+') & ~filters.UpdateType.EDITED_MESSAGE, embed.twitter))
+    application.add_handler(MessageHandler(filters.Regex(r'tiktok\.com/.+') & ~filters.UpdateType.EDITED_MESSAGE, embed.tiktok))
+    application.add_handler(MessageHandler(filters.Regex(r'instagram\.com/reel/.+') & ~filters.UpdateType.EDITED_MESSAGE, embed.insta))
+    application.add_handler(MessageHandler(filters.Regex(r'furaffinity\.net/view/.+') & ~filters.UpdateType.EDITED_MESSAGE, embed.furAffinity))
+    #application.add_handler(InlineQueryHandler(embed.twitter,r'.+(twitter|x)\.com/.+/status/[0-9]+'))
     if not KEY_PATH:
         application.run_webhook(listen='0.0.0.0', port=PORT, secret_token=WEBHOOK_TOKEN, webhook_url=f"{WEBHOOK_URL}:{PORT}")
     else:
