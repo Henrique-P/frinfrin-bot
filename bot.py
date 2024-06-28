@@ -28,16 +28,30 @@ logger = logging.getLogger(__name__)
 
 async def start(update: Update, context: CallbackContext) -> None:
     customLog.logEvent()
-    await update.message.reply_text("Hello! Send me a Twitter, TikTok, Instagram or Furaffinity link for a preview-able link. You can also send me Youtube, Spotify or other links that contains trackers so I can remove them for you.\nIf you want to include a tracker pattern in my re.search please message @Yolfrin.")
+    await update.message.reply_text(f"Hello, {update.effective_user.first_name}!\nSee /support for all the supported medias.\nFor use help, click here: /help\nYou can also check this channel if you want to know more about this bot's development:\nhttps://t.me/FrinFrinNews")
     
+async def help(update: Update, context: CallbackContext) -> None:
+    customLog.logEvent()
+    await update.message.reply_text("Alrighty. Lets walk you through this scenario: You were browsing twitter and sent your friend this post:\nhttps://twitter.com/FopsHourly/status/1806281425915883661")
+    await update.message.reply_text("Notice that despite the content being a video, twitter only allows you both to preview a static frame of the video. Now lets try using a service to embed the video in this link:\nhttps://fxtwitter.com/FopsHourly/status/1806281425915883661")
+    await update.message.reply_text("Much better, right? Now you can try sending me a link for one of the supported social medias and I'll reply to you with the embedded link.\nFor full functionality guide or suggestions please contact @Yolfrin anytime.")
+
+async def support(update: Update, context: CallbackContext) -> None:
+    customLog.logEvent()
+    await update.message.reply_text("Currently supported platforms for embedding are: Twitter, TikTok, Instagram and Furaffinity.\nI can also remove URL trackers from Spotify and Youtube links.")
+    
+async def privacy(update: Update, context: CallbackContext) -> None:
+    customLog.logEvent()
+    await update.message.reply_text("This bot keeps no data about how you use it. No user data, links or messages are logged.\nThis bot does not have ANY association with the people responsible for the embedding services used.")
+
 async def log(update: Update, context: CallbackContext) -> None:
     response = customLog.getFormattedStatistics()
     await update.message.reply_text(response)
         
 async def inlineMessage(update: Update, context: CallbackContext) -> None:
-    query = update.inline_query.query
-    if not query:
+    if not update.inline_query.query:
         return
+    query = update.inline_query.query
     customLog.logEvent()
     if re.search(r'(twitter|x)\.com/.+/status/[0-9]+',query):
         response = embed.twitter(query)
@@ -67,9 +81,9 @@ async def inlineMessage(update: Update, context: CallbackContext) -> None:
     await update.inline_query.answer(answer)
         
 async def privateMessage(update: Update, context: CallbackContext) -> None:
-    message = update.message.text
-    if not message:
+    if not update.message.text:
         return
+    message = update.message.text
     customLog.logEvent()
     if re.search(r'(twitter|x)\.com/.+/status/[0-9]+', message):
         response = embed.twitter(message)
@@ -97,13 +111,17 @@ async def privateMessage(update: Update, context: CallbackContext) -> None:
     await update.message.reply_text(response)
 
 async def healthPing(context: CallbackContext):
-    requests.get(PING_URL)
+    requests.get(PING_URL, timeout=1)
 
 def main() -> None:
     application = Application.builder().token(TOKEN).build()
-    application.job_queue.run_repeating(healthPing, interval=60, first=10)
+    if PING_URL:
+            application.job_queue.run_repeating(healthPing, interval=60, first=10)
     application.add_handler(CommandHandler("start", start))
+    application.add_handler(CommandHandler("help", help))
+    application.add_handler(CommandHandler("support", support))
     application.add_handler(CommandHandler("log", log))
+    application.add_handler(CommandHandler("privacy", privacy))
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, privateMessage))
     application.add_handler(InlineQueryHandler(inlineMessage))
     if not KEY_PATH:
