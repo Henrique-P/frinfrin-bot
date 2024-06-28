@@ -28,8 +28,17 @@ logger = logging.getLogger(__name__)
 
 async def start(update: Update, context: CallbackContext) -> None:
     customLog.logEvent()
-    await update.message.reply_text(f"Hello, {update.effective_user.first_name}! Glad to see you\nI can embed social media links for you!\nCurrently supported: Twitter, TikTok, Instagram and Furaffinity.\nIf you does not know what 'embed' means or needs general help, click here: /help")
+    await update.message.reply_text(f"Hello, {update.effective_user.first_name}!\nSee /support for all the supported medias.\nFor use help, click here: /help")
     
+async def help(update: Update, context: CallbackContext) -> None:
+    customLog.logEvent()
+    await update.message.reply_text("Alrighty. Lets walk you through this scenario: You were browsing twitter and sent your friend this post:\nhttps://twitter.com/FopsHourly/status/1806281425915883661")
+    await update.message.reply_text("Notice that despite the content being a video, twitter only allows you both to preview a static frame of the video. Now lets try using a service to embed the video in this link:\nhttps://fxtwitter.com/FopsHourly/status/1806281425915883661")
+    await update.message.reply_text("Much better, right? Now you can try sending me a link for one of the supported social medias and I'll reply to you with the embedded link.\nFor full functionality guide or suggestions please contact @Yolfrin anytime.")
+
+async def support(update: Update, context: CallbackContext) -> None:
+    await update.message.reply_text("Currently supported platforms for embedding are: Twitter, TikTok, Instagram and Furaffinity.\nI can also remove URL trackers from Spotify and Youtube links.")
+
 async def log(update: Update, context: CallbackContext) -> None:
     response = customLog.getFormattedStatistics()
     await update.message.reply_text(response)
@@ -103,6 +112,8 @@ def main() -> None:
     application = Application.builder().token(TOKEN).build()
     #application.job_queue.run_repeating(healthPing, interval=60, first=10)
     application.add_handler(CommandHandler("start", start))
+    application.add_handler(CommandHandler("help", help))
+    application.add_handler(CommandHandler("support", support))
     application.add_handler(CommandHandler("log", log))
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, privateMessage))
     application.add_handler(InlineQueryHandler(inlineMessage))
