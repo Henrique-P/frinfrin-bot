@@ -28,7 +28,7 @@ logger = logging.getLogger(__name__)
 
 async def start(update: Update, context: CallbackContext) -> None:
     customLog.logEvent()
-    await update.message.reply_text("Hello! Send me a Twitter, TikTok, Instagram or Furaffinity link for a preview-able link. You can also send me Youtube, Spotify or other links that contains trackers so I can remove them for you.\nIf you want to include a tracker pattern in my re.search please message @Yolfrin.")
+    await update.message.reply_text(f"Hello, {update.effective_user.first_name}! Glad to see you\nI can embed social media links for you!\nCurrently supported: Twitter, TikTok, Instagram and Furaffinity.\nIf you does not know what 'embed' means or needs general help, click here: /help")
     
 async def log(update: Update, context: CallbackContext) -> None:
     response = customLog.getFormattedStatistics()
@@ -101,7 +101,7 @@ async def healthPing(context: CallbackContext):
 
 def main() -> None:
     application = Application.builder().token(TOKEN).build()
-    application.job_queue.run_repeating(healthPing, interval=60, first=10)
+    #application.job_queue.run_repeating(healthPing, interval=60, first=10)
     application.add_handler(CommandHandler("start", start))
     application.add_handler(CommandHandler("log", log))
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, privateMessage))
