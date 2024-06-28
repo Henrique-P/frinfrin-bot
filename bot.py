@@ -48,67 +48,66 @@ async def log(update: Update, context: CallbackContext) -> None:
     response = customLog.getFormattedStatistics()
     await update.message.reply_text(response)
         
-async def inlineMessage(update: Update, context: CallbackContext) -> None:
-    if not update.inline_query.query:
-        return
-    query = update.inline_query.query
-    customLog.logEvent()
-    if re.search(r'(twitter|x)\.com/.+/status/[0-9]+',query):
-        response = embed.twitter(query)
-        thumbUrl = 'https://cdn.freelogovectors.net/wp-content/uploads/2023/07/twitter-x-logo-freelogovectors.net_.png'
-        title = "X"
-    elif re.search(r'tiktok\.com/.+',query):
-        response = embed.tiktok(query)
-        thumbUrl = ''
-        title = "TikTok"
-    elif re.search(r'instagram\.com/reel/.+', query):
-        response = embed.insta(query)
-        thumbUrl = ''
-        title = "Instagram"
-    elif re.search(r'furaffinity\.net/view/.+', query):
-        response = embed.furAffinity(query)
-        thumbUrl = 'https://logos-world.net/wp-content/uploads/2024/02/FurAffinity-Logo-500x281.png'
-        title = "FurAffinity"
-    elif re.search(embed.trackerRegexPattern, query):
-        response = embed.trackerRemoval(query)
-        thumbUrl = ''
-        title = "Tracker Removed"
-    else:
-        return
-    if not response or response == -1 or response == query:
-        return
-    answer = [InlineQueryResultArticle(response, title, InputTextMessageContent(response), thumbnail_url=thumbUrl, description='Send embed, trackerless link')]
-    await update.inline_query.answer(answer)
+# async def inlineMessage(update: Update, context: CallbackContext) -> None:
+#     if not update.inline_query.query:
+#         return
+#     query = update.inline_query.query
+#     customLog.logEvent()
+#     if re.search(r'(twitter|x)\.com/.+/status/[0-9]+',query):
+#         response = embed.twitter(query)
         
-async def privateMessage(update: Update, context: CallbackContext) -> None:
-    if not update.message.text:
-        return
-    message = update.message.text
-    customLog.logEvent()
-    if re.search(r'(twitter|x)\.com/.+/status/[0-9]+', message):
-        response = embed.twitter(message)
-    elif re.search(r'tiktok\.com/.+', message):
-        response = embed.tiktok(message)
-    elif re.search(r'instagram\.com/reel/.+', message):
-        response = embed.insta(message)
-    elif re.search(r'furaffinity\.net/view/.+', message):
-        response = embed.furAffinity(message)
-    elif re.search(embed.trackerRegexPattern, message):
-        response = embed.trackerRemoval(message)
-    else:
-        await update.message.reply_text("Message not recognized. Try sending me a Instagram, Twitter, Furaffinity or TikTok link and I will embed and/or remove any trackers.")
-        return
-    if message == response:
-        await update.message.reply_text("Nothing to do with this link.")
-        await update.message.reply_sticker("CAACAgEAAxkBAAECSm9mXAHqyk3h8vkRx7ucxyF6qQppkAACuQIAAh9lSEfeZwF56Y_N9DUE")
-        return
-    elif not response:
-        await update.message.reply_text("Here's your link:\nhttps://youtu.be/dQw4w9WgXcQ", disable_web_page_preview=True)
-        return
-    elif response == -1:
-        await update.message.reply_text("This URL is either invalid or the content is private.")
-        return
-    await update.message.reply_text(response)
+#     elif re.search(r'tiktok\.com/.+',query):
+#         response = embed.tiktok(query)
+#         thumbUrl = ''
+#         title = "TikTok"
+#     elif re.search(r'instagram\.com/reel/.+', query):
+#         response = embed.insta(query)
+#         thumbUrl = ''
+#         title = "Instagram"
+#     elif re.search(r'furaffinity\.net/view/.+', query):
+#         response = embed.furAffinity(query)
+#         thumbUrl = 'https://logos-world.net/wp-content/uploads/2024/02/FurAffinity-Logo-500x281.png'
+#         title = "FurAffinity"
+#     elif re.search(embed.trackerRegexPattern, query):
+#         response = embed.trackerRemoval(query)
+#         thumbUrl = ''
+#         title = "Tracker Removed"
+#     else:
+#         return
+#     if not response or response == -1 or response == query:
+#         return
+#     answer = [InlineQueryResultArticle(response, title, InputTextMessageContent(response), thumbnail_url=thumbUrl, description='Send embed, trackerless link')]
+#     await update.inline_query.answer(answer)
+        
+# async def privateMessage(update: Update, context: CallbackContext) -> None:
+#     if not update.message.text:
+#         return
+#     message = update.message.text
+#     customLog.logEvent()
+#     if re.search(r'(twitter|x)\.com/.+/status/[0-9]+', message):
+#         response = embed.twitter(message)
+#     elif re.search(r'tiktok\.com/.+', message):
+#         response = embed.tiktok(message)
+#     elif re.search(r'instagram\.com/reel/.+', message):
+#         response = embed.insta(message)
+#     elif re.search(r'furaffinity\.net/view/.+', message):
+#         response = embed.furAffinity(message)
+#     elif re.search(embed.trackerRegexPattern, message):
+#         response = embed.trackerRemoval(message)
+#     else:
+#         await update.message.reply_text("Message not recognized. Try sending me a Instagram, Twitter, Furaffinity or TikTok link and I will embed and/or remove any trackers.")
+#         return
+#     if message == response:
+#         await update.message.reply_text("Nothing to do with this link.")
+#         await update.message.reply_sticker("CAACAgEAAxkBAAECSm9mXAHqyk3h8vkRx7ucxyF6qQppkAACuQIAAh9lSEfeZwF56Y_N9DUE")
+#         return
+#     elif not response:
+#         await update.message.reply_text("Here's your link:\nhttps://youtu.be/dQw4w9WgXcQ", disable_web_page_preview=True)
+#         return
+#     elif response == -1:
+#         await update.message.reply_text("This URL is either invalid or the content is private.")
+#         return
+#     await update.message.reply_text(response)
 
 async def healthPing(context: CallbackContext):
     requests.get(PING_URL, timeout=1)
@@ -116,14 +115,17 @@ async def healthPing(context: CallbackContext):
 def main() -> None:
     application = Application.builder().token(TOKEN).build()
     if PING_URL:
-            application.job_queue.run_repeating(healthPing, interval=60, first=10)
+        application.job_queue.run_repeating(healthPing, interval=60, first=10)
     application.add_handler(CommandHandler("start", start))
     application.add_handler(CommandHandler("help", help))
     application.add_handler(CommandHandler("support", support))
     application.add_handler(CommandHandler("log", log))
     application.add_handler(CommandHandler("privacy", privacy))
-    application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, privateMessage))
-    application.add_handler(InlineQueryHandler(inlineMessage))
+    application.add_handler(MessageHandler(filters.TEXT & filters.Regex(r'(twitter|x)\.com/.+/status/[0-9]+'), embed.twitter))
+    application.add_handler(MessageHandler(filters.TEXT & filters.Regex(r'tiktok\.com/.+'), embed.tiktok))
+    application.add_handler(MessageHandler(filters.TEXT & filters.Regex(r'instagram\.com/reel/.+'), embed.insta))
+    application.add_handler(MessageHandler(filters.TEXT & filters.Regex(r'furaffinity\.net/view/.+'), embed.furAffinity))
+    application.add_handler(InlineQueryHandler(embed.twitter, r'(twitter|x)\.com/.+/status/[0-9]+$'))
     if not KEY_PATH:
         application.run_webhook(listen='0.0.0.0', port=PORT, secret_token=WEBHOOK_TOKEN, webhook_url=f"{WEBHOOK_URL}:{PORT}")
     else:
