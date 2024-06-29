@@ -15,9 +15,9 @@ TOKEN = os.getenv('TOKEN')
 WEBHOOK_TOKEN = os.getenv('WEBHOOK_TOKEN')
 WEBHOOK_URL = os.getenv('WEBHOOK_URL')
 PORT = os.getenv('PORT')
-KEY_PATH = os.getenv('KEY_PATH', None)
-CERT_PATH = os.getenv('CERT_PATH', None)
-PING_URL = os.getenv('PING_URL', None)
+KEY_PATH = os.getenv('KEY_PATH')
+CERT_PATH = os.getenv('CERT_PATH')
+PING_URL = os.getenv('PING_URL')
 
 botStatus = botInfo()
 
