@@ -6,7 +6,7 @@ trackerRegexPattern = r'si=[^&]*&?|igsh=[^&]*&?'
 def twitter(originalLink: str):
     postLink = re.search(r'[^/]+/status/[0-9]+', originalLink).group()
     apiLink = "https://api.fxtwitter.com/" + postLink
-    statusCode = requests.get(apiLink).status_code
+    statusCode = requests.get(apiLink, timeout=1).status_code
     if statusCode != 200:
         return -1
     else:
@@ -14,7 +14,7 @@ def twitter(originalLink: str):
 
 def tiktok(originalLink: str):
     if re.search(r'vm\.tiktok\.com/.+|tiktok\.com/t/.+',originalLink):
-        response = requests.get(originalLink)
+        response = requests.get(originalLink, timeout=1)
         postLink = re.search(r'@[^/]+/video/[0-9]+', response.url)
     else:
         postLink = re.search(r'@[^/]+/video/[0-9]+', originalLink)
