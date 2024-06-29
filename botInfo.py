@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 
-class UsageStatistics:
+class botInfo:
     def __init__(self):
         self.events = []
         self.bootTime = datetime.now()
