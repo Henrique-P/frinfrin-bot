@@ -8,7 +8,7 @@ trackerRegexPattern = r'si=[^&]*&?|igsh=[^&]*&?'
 
 twitterPattern = r'(twitter|x)\.com/.+/status/[0-9]+'
 twitterInlinePattern = r'.+(twitter|x)\.com/.+/status/[0-9]+'
-tiktokShortenedPattern = r'vm\.tiktok\.com/[^/]+|tiktok\.com/t/[^/]+'
+tiktokShortPattern = r'vm\.tiktok\.com/[^/]+|tiktok\.com/t/[^/]+'
 tiktokFullPattern = r'tiktok\.com/@[^/]+/video/[0-9]+'
 tiktokInlinePattern = r'.+tiktok\.com/.+'
 instaPattern = r'instagram\.com/reel/.+'
@@ -49,16 +49,32 @@ def twitterEmbed(link:str):
     if isPostOK:
         return composed
 
-async def tiktokHandler(update: Update, context: CallbackContext):
-    match = context.match
-    pass
-    # response = requests.get(originalLink, timeout=1)
-    # postLink = re.search(r'@[^/]+/video/[0-9]+', response.url)
-    # else:
-    #     postLink = re.search(r'@[^/]+/video/[0-9]+', originalLink)
-    # if not postLink:
-    #     return -1
-    # return "https://fixuptiktok.com/" + postLink.group()
+async def tiktokFullHandler(update: Update, context: CallbackContext):
+    response = requests.get('https://' + context.match.group(), timeout=1)
+    postLink = re.search(tiktokFullPattern, response.url).group()
+    decomposedLink = context.match.group().split('/')
+    domain = decomposedLink[0]
+    userHandle = decomposedLink[1]
+    postType = decomposedLink[2]
+    postId = decomposedLink[3]
+    prefix = 'fixup'
+    finalLink = f"{prefix}{domain}/{userHandle}/{postType}/{postId}"
+    await update.message.reply_text(finalLink)
+
+async def tiktokShortHandler(update: Update, context: CallbackContext):
+    response = requests.get('https://' + context.match.group(), timeout=1)
+    postLink = re.search(tiktokFullPattern, response.url).group()
+    if postLink:
+        decomposedLink = postLink.split('/')
+        domain = decomposedLink[0]
+        userHandle = decomposedLink[1]
+        postType = decomposedLink[2]
+        postId = decomposedLink[3]
+        prefix = 'fixup'
+        finalLink = f"{prefix}{domain}/{userHandle}/{postType}/{postId}"
+        await update.message.reply_text(finalLink)
+    else:
+        await update.message.reply_text("This URL is either invalid or the content is private.")
 
 async def instaHandler(update: Update, context: CallbackContext):
     decomposedLink = context.match.group().split('/')
