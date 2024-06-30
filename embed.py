@@ -34,8 +34,8 @@ async def twitter(update: Update, context: CallbackContext):
 
 def tiktok(update: Update, context: CallbackContext):
     if re.search(r'vm\.tiktok\.com/.+|tiktok\.com/t/.+',originalLink):
-        requests.get(originalLink)
-        postLink = re.search(r'@[^/]+/video/[0-9]+', l)
+        response = requests.get(originalLink, timeout=1)
+        postLink = re.search(r'@[^/]+/video/[0-9]+', response.url)
     else:
         postLink = re.search(r'@[^/]+/video/[0-9]+', originalLink)
     if not postLink:
