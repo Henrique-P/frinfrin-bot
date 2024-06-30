@@ -1,5 +1,4 @@
 import logging
-import re
 import requests
 from telegram import Update
 from telegram.ext import CommandHandler, CallbackContext, Application, MessageHandler, filters, InlineQueryHandler
@@ -60,21 +59,24 @@ def main() -> None:
     application = Application.builder().token(TOKEN).build()
     if PING_URL:
         application.job_queue.run_repeating(healthPing, interval=60, first=10)
+    
     application.add_handler(CommandHandler("start", start, ~filters.UpdateType.EDITED_MESSAGE))
     application.add_handler(CommandHandler("help", help, ~filters.UpdateType.EDITED_MESSAGE))
     application.add_handler(CommandHandler("support", support, ~filters.UpdateType.EDITED_MESSAGE))
     application.add_handler(CommandHandler("log", log, ~filters.UpdateType.EDITED_MESSAGE))
     application.add_handler(CommandHandler("privacy", privacy, ~filters.UpdateType.EDITED_MESSAGE))
     application.add_handler(CommandHandler("git", git, ~filters.UpdateType.EDITED_MESSAGE))
+    
     application.add_handler(MessageHandler(filters.Regex(embed.twitterPattern) & ~filters.UpdateType.EDITED_MESSAGE, embed.twitterHandler))
-    application.add_handler(MessageHandler(filters.Regex(embed.tiktokFullPattern) & ~filters.UpdateType.EDITED_MESSAGE, embed.tiktokFullHandler))
-    application.add_handler(MessageHandler(filters.Regex(embed.tiktokShortPattern) & ~filters.UpdateType.EDITED_MESSAGE, embed.tiktokShortHandler))
+    application.add_handler(MessageHandler((filters.Regex(embed.tiktokCompletePattern)) & ~filters.UpdateType.EDITED_MESSAGE, embed.tiktokHandler))
     application.add_handler(MessageHandler(filters.Regex(embed.instaPattern) & ~filters.UpdateType.EDITED_MESSAGE, embed.instaHandler))
     application.add_handler(MessageHandler(filters.Regex(embed.furAffinityPattern) & ~filters.UpdateType.EDITED_MESSAGE, embed.furAffinityHandler))
+    
     application.add_handler(InlineQueryHandler(embed.twitterInlineHandler,embed.twitterInlinePattern))
-    # application.add_handler(InlineQueryHandler(embed.tiktokInlineHandler,embed.tiktokInlinePattern))
-    # application.add_handler(InlineQueryHandler(embed.instaInlineHandler,embed.instaInlinePattern))
-    # application.add_handler(InlineQueryHandler(embed.furAffinityInlineHandler,embed.furAffinityInlinePattern))
+    application.add_handler(InlineQueryHandler(embed.tiktokInlineHandler,embed.tiktokInlinePattern))
+    application.add_handler(InlineQueryHandler(embed.instaInlineHandler,embed.instaInlinePattern))
+    application.add_handler(InlineQueryHandler(embed.furAffinityInlineHandler,embed.furAffinityInlinePattern))
+    
     if not KEY_PATH:
         application.run_webhook(listen='0.0.0.0', port=PORT, secret_token=WEBHOOK_TOKEN, webhook_url=f"{WEBHOOK_URL}:{PORT}")
     else:
