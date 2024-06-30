@@ -7,6 +7,7 @@ import os
 import dotenv
 from botInfo import botInfo
 import embed
+from uuid import uuid4
 
 if 'TOKEN' not in os.environ:
     dotenv.load_dotenv()
@@ -77,7 +78,7 @@ async def inlineMessage(update: Update, context: CallbackContext) -> None:
         return
     if not response or response == -1 or response == query:
         return
-    answer = [InlineQueryResultArticle(response, title, InputTextMessageContent(response), thumbnail_url=thumbUrl, description='Send embed, trackerless link')]
+    answer = [InlineQueryResultArticle(str(uuid4()), title, InputTextMessageContent(response), thumbnail_url=thumbUrl, description='Send embed, trackerless link')]
     await update.inline_query.answer(answer)
         
 async def privateMessage(update: Update, context: CallbackContext) -> None:
