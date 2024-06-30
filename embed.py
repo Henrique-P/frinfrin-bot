@@ -86,7 +86,7 @@ async def tiktokInlineHandler(update: Update, context: CallbackContext):
     postId = decomposedLink[3]
     prefix = 'fixup'
     finalLink = f"{prefix}{domain}/{userHandle}/{postType}/{postId}"
-    thumbUrl = 'https://cdn.freelogovectors.net/wp-content/uploads/2023/07/twitter-x-logo-freelogovectors.net_.png'
+    thumbUrl = 'https://cdn.pixabay.com/photo/2021/01/30/06/42/tiktok-5962992_1280.png'
     title = "Post Found"
     description = 'Send this TikTok link!'
     answer = [InlineQueryResultArticle(str(uuid.uuid4()), title, InputTextMessageContent(finalLink), thumbnail_url=thumbUrl, description=description)]
@@ -113,7 +113,7 @@ async def instaInlineHandler(update: Update, context: CallbackContext):
     #trackers = decomposedLink[3]
     prefix = 'dd'
     finalLink = f"{prefix}{domain}/{postType}/{postId}"
-    thumbUrl = 'https://cdn.freelogovectors.net/wp-content/uploads/2023/07/twitter-x-logo-freelogovectors.net_.png'
+    thumbUrl = 'https://img.freepik.com/vetores-gratis/instagram-icone-novo_1057-2227.jpg?w=826&t=st=1719789805~exp=1719790405~hmac=292f586caf30f8fed289446a1b4520bdaed57dfe1de281b38f928ec735dfe041'
     title = "Post Found"
     description = 'Send this Instagram link!'
     answer = [InlineQueryResultArticle(str(uuid.uuid4()), title, InputTextMessageContent(finalLink), thumbnail_url=thumbUrl, description=description)]
@@ -138,8 +138,8 @@ async def furAffinityInlineHandler(update: Update, context: CallbackContext):
     postId = decomposedLink[2]
     prefix = 'fx'
     finalLink = f"{prefix}{domain}/{postType}/{postId}"
-    thumbUrl = 'https://cdn.freelogovectors.net/wp-content/uploads/2023/07/twitter-x-logo-freelogovectors.net_.png'
+    thumbUrl = 'https://logos-world.net/wp-content/uploads/2024/02/FurAffinity-Logo-500x281.png'
     title = "Post Found"
-    description = 'Send this Instagram link!'
+    description = 'Send this FurAffinity link!'
     answer = [InlineQueryResultArticle(str(uuid.uuid4()), title, InputTextMessageContent(finalLink), thumbnail_url=thumbUrl, description=description)]
     await update.inline_query.answer(answer)
