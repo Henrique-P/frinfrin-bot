@@ -7,6 +7,7 @@ import os
 import dotenv
 from botInfo import botInfo
 import embed
+import gitlog
 
 if 'TOKEN' not in os.environ:
     dotenv.load_dotenv()
@@ -48,6 +49,10 @@ async def log(update: Update, context: CallbackContext) -> None:
     response = botStatus.getFormattedStatistics()
     await update.message.reply_text(response)
 
+async def git(update: Update, context: CallbackContext) -> None:
+    response = gitlog.getHeadCommit()
+    await update.message.reply_text(response)
+
 async def healthPing(context: CallbackContext):
     requests.get(PING_URL, timeout=1)
 
@@ -55,11 +60,12 @@ def main() -> None:
     application = Application.builder().token(TOKEN).build()
     if PING_URL:
         application.job_queue.run_repeating(healthPing, interval=60, first=10)
-    application.add_handler(CommandHandler("start", start))
-    application.add_handler(CommandHandler("help", help))
-    application.add_handler(CommandHandler("support", support))
-    application.add_handler(CommandHandler("log", log))
-    application.add_handler(CommandHandler("privacy", privacy))
+    application.add_handler(CommandHandler("start", start, ~filters.UpdateType.EDITED_MESSAGE))
+    application.add_handler(CommandHandler("help", help, ~filters.UpdateType.EDITED_MESSAGE))
+    application.add_handler(CommandHandler("support", support, ~filters.UpdateType.EDITED_MESSAGE))
+    application.add_handler(CommandHandler("log", log, ~filters.UpdateType.EDITED_MESSAGE))
+    application.add_handler(CommandHandler("privacy", privacy, ~filters.UpdateType.EDITED_MESSAGE))
+    application.add_handler(CommandHandler("git", git, ~filters.UpdateType.EDITED_MESSAGE))
     application.add_handler(MessageHandler(filters.Regex(embed.twitterPattern) & ~filters.UpdateType.EDITED_MESSAGE, embed.twitterHandler))
     application.add_handler(MessageHandler(filters.Regex(embed.tiktokFullPattern) & ~filters.UpdateType.EDITED_MESSAGE, embed.tiktokHandler))
     application.add_handler(MessageHandler(filters.Regex(embed.instaPattern) & ~filters.UpdateType.EDITED_MESSAGE, embed.instaHandler))
