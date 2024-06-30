@@ -68,7 +68,7 @@ def main() -> None:
     application.add_handler(CommandHandler("git", git, ~filters.UpdateType.EDITED_MESSAGE))
     
     application.add_handler(MessageHandler(filters.Regex(embed.twitterPattern) & ~filters.UpdateType.EDITED_MESSAGE, embed.twitterHandler))
-    application.add_handler(MessageHandler((filters.Regex(embed.tiktokCompletePattern)) & ~filters.UpdateType.EDITED_MESSAGE, embed.tiktokHandler))
+    application.add_handler(MessageHandler(filters.Regex(embed.tiktokCompletePattern) & ~filters.UpdateType.EDITED_MESSAGE, embed.tiktokHandler))
     application.add_handler(MessageHandler(filters.Regex(embed.instaPattern) & ~filters.UpdateType.EDITED_MESSAGE, embed.instaHandler))
     application.add_handler(MessageHandler(filters.Regex(embed.furAffinityPattern) & ~filters.UpdateType.EDITED_MESSAGE, embed.furAffinityHandler))
     

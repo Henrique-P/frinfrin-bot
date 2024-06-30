@@ -11,8 +11,7 @@ twitterInlinePattern = r'.+(twitter|x)\.com/.+/status/[0-9]+'
 #tiktokShortPattern = r'vm\.tiktok\.com/[^/]+|tiktok\.com/t/[^/]+'
 tiktokFullPattern = r'tiktok\.com/@[^/]+/video/[0-9]+'
 tiktokInlinePattern = r'.+tiktok\.com/.+'
-#tiktokCompletePattern = r'tiktok\.com/@[^/]+/video/[0-9]+|vm\.tiktok\.com/[^/]+|tiktok\.com/t/[^/]+'
-tiktokCompletePattern = r'tiktok\.com/@[^/]+/video/[0-9]+tiktok\.com/t/[^/]+'
+tiktokCompletePattern = r'tiktok\.com/@[^/]+/video/[0-9]+|vm\.tiktok\.com/[^/]+|tiktok\.com/t/[^/]+'
 instaPattern = r'instagram\.com/reel/.+'
 instaInlinePattern = r'.+instagram\.com/reel/.+'
 furAffinityPattern = r'furaffinity\.net/view/.+'
@@ -54,7 +53,10 @@ def twitterEmbed(link:str):
 
 async def tiktokHandler(update: Update, context: CallbackContext):
     url = context.match.group()
-    response = requests.get('https://www.' + url , timeout=1)
+    if url.startswith('vm'):
+        response = requests.get('https://' + url , timeout=1)
+    else:
+        response = requests.get('https://www.' + url , timeout=1)
     if len(response.history):
         url = re.search(tiktokFullPattern, response.url).group()
     decomposedLink = url.split('/')
@@ -69,7 +71,10 @@ async def tiktokHandler(update: Update, context: CallbackContext):
 async def tiktokInlineHandler(update: Update, context: CallbackContext):
     matches = re.search(tiktokCompletePattern, update.inline_query.query)
     url = matches.group()
-    response = requests.get('https://www.' + url , timeout=1)
+    if url.startswith('vm'):
+        response = requests.get('https://' + url , timeout=1)
+    else:
+        response = requests.get('https://www.' + url , timeout=1)
     if len(response.history):
         url = re.search(tiktokFullPattern, response.url).group()
     decomposedLink = url.split('/')
