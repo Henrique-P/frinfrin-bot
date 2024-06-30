@@ -23,6 +23,7 @@ async def twitterHandler(update: Update, context: CallbackContext):
     response = twitterEmbed(decomposedLink)
     if response:
         await update.message.reply_text(response)
+        #await update.message.delete()
     else:
         await update.message.reply_text("This URL is either invalid or the content is private.")
 
@@ -67,6 +68,7 @@ async def tiktokHandler(update: Update, context: CallbackContext):
     prefix = 'fixup'
     finalLink = f"{prefix}{domain}/{userHandle}/{postType}/{postId}"
     await update.message.reply_text(finalLink)
+    #await update.message.delete()
 
 async def tiktokInlineHandler(update: Update, context: CallbackContext):
     matches = re.search(tiktokCompletePattern, update.inline_query.query)
@@ -100,6 +102,7 @@ async def instaHandler(update: Update, context: CallbackContext):
     prefix = 'dd'
     finalLink = f"{prefix}{domain}/{postType}/{postId}"
     await update.message.reply_text(finalLink)
+    #await update.message.delete()
 
 async def instaInlineHandler(update: Update, context: CallbackContext):
     url = re.search(instaPattern, update.inline_query.query).group()
@@ -125,6 +128,7 @@ async def furAffinityHandler(update: Update, context: CallbackContext):
     prefix = 'fx'
     finalLink = f"{prefix}{domain}/{postType}/{postId}"
     await update.message.reply_text(finalLink)
+    #await update.message.delete()
 
 async def furAffinityInlineHandler(update: Update, context: CallbackContext):
     url = re.search(furAffinityPattern, update.inline_query.query).group()
