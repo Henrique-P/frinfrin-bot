@@ -64,7 +64,7 @@ def main() -> None:
     application.add_handler(MessageHandler(filters.Regex(r'tiktok\.com/.+') & ~filters.UpdateType.EDITED_MESSAGE, embed.tiktok))
     application.add_handler(MessageHandler(filters.Regex(r'instagram\.com/reel/.+') & ~filters.UpdateType.EDITED_MESSAGE, embed.insta))
     application.add_handler(MessageHandler(filters.Regex(r'furaffinity\.net/view/.+') & ~filters.UpdateType.EDITED_MESSAGE, embed.furAffinity))
-    #application.add_handler(InlineQueryHandler(embed.twitter,r'.+(twitter|x)\.com/.+/status/[0-9]+'))
+    application.add_handler(InlineQueryHandler(embed.twitter,r'.+(twitter|x)\.com/.+/status/[0-9]+'))
     if not KEY_PATH:
         application.run_webhook(listen='0.0.0.0', port=PORT, secret_token=WEBHOOK_TOKEN, webhook_url=f"{WEBHOOK_URL}:{PORT}")
     else:

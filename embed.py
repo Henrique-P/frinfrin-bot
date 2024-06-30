@@ -1,12 +1,16 @@
 import re
+import uuid
 import requests
 from telegram import InlineQueryResultArticle, InputTextMessageContent, Update
 from telegram.ext import CallbackContext
 
 trackerRegexPattern = r'si=[^&]*&?|igsh=[^&]*&?'
-
+twitterPattern = r'(twitter|x)\.com/.+/status/[0-9]+'
 async def twitter(update: Update, context: CallbackContext):
-    decomposed = context.match.group().split('/')
+    if update.inline_query:
+        decomposed = re.search(twitterPattern, update.inline_query.query).group().split('/')
+    else:
+        decomposed = context.match.group().split('/')
     domain = decomposed[0]
     userHandle = decomposed[1]
     postId = decomposed[3]
@@ -17,20 +21,18 @@ async def twitter(update: Update, context: CallbackContext):
     apiLink = f"https://api.fxtwitter.com/{userHandle}/status/{postId}"
     composed = f"{prefix}{domain}/{userHandle}/status/{postId}"
     isPostOK = requests.get(apiLink).status_code == 200
-    if not isPostOK:
-        await update.message.reply_text("This URL is either invalid or the content is private.")
+    if update.inline_query:
+        if isPostOK:
+            thumbUrl = 'https://cdn.freelogovectors.net/wp-content/uploads/2023/07/twitter-x-logo-freelogovectors.net_.png'
+            title = "Post Found"
+            description = 'Send this Twitter link!'
+            answer = [InlineQueryResultArticle(str(uuid.uuid4()), title, InputTextMessageContent(composed), thumbnail_url=thumbUrl, description=description)]
+            await update.inline_query.answer(answer)
     else:
-        await update.message.reply_text(composed)
-            
-# if update.inline_query:
-#         if not isPostOK:
-#             return
-#         thumbUrl = 'https://cdn.freelogovectors.net/wp-content/uploads/2023/07/twitter-x-logo-freelogovectors.net_.png'
-#         title = "Post Found"
-#         description = 'Send this Twitter link!'
-#         answer = [InlineQueryResultArticle(composed, title, InputTextMessageContent(composed), thumbnail_url=thumbUrl, description=description)]
-#         await update.inline_query.answer(answer)
-#     el
+        if isPostOK:
+            await update.message.reply_text(composed)
+        else:
+            await update.message.reply_text("This URL is either invalid or the content is private.")
 
 def tiktok(update: Update, context: CallbackContext):
     if re.search(r'vm\.tiktok\.com/.+|tiktok\.com/t/.+',originalLink):
