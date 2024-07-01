@@ -3,6 +3,7 @@ import uuid
 import requests
 from telegram import InlineQueryResultArticle, InputTextMessageContent, Update, ReplyParameters
 from telegram.ext import CallbackContext
+from bot import botStatus
 
 generictrackerPattern = r'si=[^&]+|pp=[^&]+'
 
@@ -18,6 +19,7 @@ furAffinityPattern = r'furaffinity\.net/view/.+'
 furAffinityInlinePattern = r'.+furaffinity\.net/view/.+'
 
 async def twitterHandler(update: Update, context: CallbackContext):
+    botStatus.logEvent()
     url = context.match.group()
     decomposedLink = url.split('/')
     response = twitterEmbed(decomposedLink)
@@ -29,6 +31,7 @@ async def twitterHandler(update: Update, context: CallbackContext):
         await update.message.reply_text("This URL is either invalid or the content is private.", reply_parameters=replyParams)
 
 async def twitterInlineHandler(update: Update, context: CallbackContext):
+    botStatus.logEvent()
     url = re.search(twitterPattern, update.inline_query.query).group()
     decomposedLink = url.split('/')
     response = twitterEmbed(decomposedLink)
@@ -49,11 +52,12 @@ def twitterEmbed(link:str):
         prefix = 'fx'
     apiLink = f"https://api.fxtwitter.com/{userHandle}/status/{postId}"
     composed = f"{prefix}{domain}/{userHandle}/status/{postId}"
-    isPostOK = requests.get(apiLink).status_code == 200
+    isPostOK = requests.get(apiLink, timeout=1).status_code == 200
     if isPostOK:
         return composed
 
 async def tiktokHandler(update: Update, context: CallbackContext):
+    botStatus.logEvent()
     url = context.match.group()
     if url.startswith('vm'):
         response = requests.get('https://' + url , timeout=1)
@@ -72,6 +76,7 @@ async def tiktokHandler(update: Update, context: CallbackContext):
     await update.message.delete()
 
 async def tiktokInlineHandler(update: Update, context: CallbackContext):
+    botStatus.logEvent()
     matches = re.search(tiktokCompletePattern, update.inline_query.query)
     url = matches.group()
     if url.startswith('vm'):
@@ -94,6 +99,7 @@ async def tiktokInlineHandler(update: Update, context: CallbackContext):
     await update.inline_query.answer(answer)
 
 async def instaHandler(update: Update, context: CallbackContext):
+    botStatus.logEvent()
     url = context.match.group()
     decomposedLink = url.split('/')
     domain = decomposedLink[0]
@@ -106,6 +112,7 @@ async def instaHandler(update: Update, context: CallbackContext):
     await update.message.delete()
 
 async def instaInlineHandler(update: Update, context: CallbackContext):
+    botStatus.logEvent()
     url = re.search(instaPattern, update.inline_query.query).group()
     decomposedLink = url.split('/')
     domain = decomposedLink[0]
@@ -121,6 +128,7 @@ async def instaInlineHandler(update: Update, context: CallbackContext):
     await update.inline_query.answer(answer)
 
 async def furAffinityHandler(update: Update, context: CallbackContext):
+    botStatus.logEvent()
     url = context.match.group()
     decomposedLink = url.split('/')
     domain = decomposedLink[0]
@@ -132,6 +140,7 @@ async def furAffinityHandler(update: Update, context: CallbackContext):
     await update.message.delete()
 
 async def furAffinityInlineHandler(update: Update, context: CallbackContext):
+    botStatus.logEvent()
     url = re.search(furAffinityPattern, update.inline_query.query).group()
     decomposedLink = url.split('/')
     domain = decomposedLink[0]
@@ -146,6 +155,7 @@ async def furAffinityInlineHandler(update: Update, context: CallbackContext):
     await update.inline_query.answer(answer)
 
 # async def genericTracker(update: Update, context: CallbackContext):
+#     botStatus.logEvent()
 #     decomposedLink = context.match.string.split('?')
 #     decomposedArguments = decomposedLink[1].split('&')
 #     url = decomposedLink[0]
