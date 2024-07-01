@@ -1,6 +1,6 @@
 import logging
 import requests
-from telegram import Update
+from telegram import ReplyParameters, Update
 from telegram.ext import CommandHandler, CallbackContext, Application, MessageHandler, filters, InlineQueryHandler
 import os
 import dotenv
@@ -52,6 +52,10 @@ async def git(update: Update, context: CallbackContext) -> None:
     response = gitlog.getHeadCommit()
     await update.message.reply_text(response)
 
+async def errorHandler(update: Update, context: CallbackContext) -> None:
+    replyParams = ReplyParameters(update.message.id)
+    await update.message.reply_text("That doesn't seem to be a valid link or command.\nCurrently supported platforms for embedding are: Twitter, TikTok, Instagram and Furaffinity.\nI can also remove URL trackers from Spotify and Youtube links.", reply_parameters=replyParams)
+
 async def healthPing(context: CallbackContext):
     requests.get(PING_URL, timeout=1)
 
@@ -71,6 +75,8 @@ def main() -> None:
     application.add_handler(MessageHandler(filters.Regex(embed.tiktokCompletePattern) & ~filters.UpdateType.EDITED_MESSAGE, embed.tiktokHandler))
     application.add_handler(MessageHandler(filters.Regex(embed.instaPattern) & ~filters.UpdateType.EDITED_MESSAGE, embed.instaHandler))
     application.add_handler(MessageHandler(filters.Regex(embed.furAffinityPattern) & ~filters.UpdateType.EDITED_MESSAGE, embed.furAffinityHandler))
+    # application.add_handler(MessageHandler(filters.Regex(embed.generictrackerPattern) & ~filters.UpdateType.EDITED_MESSAGE, embed.genericTracker))
+    application.add_handler(MessageHandler(~filters.UpdateType.EDITED_MESSAGE, errorHandler))
     
     application.add_handler(InlineQueryHandler(embed.twitterInlineHandler,embed.twitterInlinePattern))
     application.add_handler(InlineQueryHandler(embed.tiktokInlineHandler,embed.tiktokInlinePattern))

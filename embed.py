@@ -144,3 +144,15 @@ async def furAffinityInlineHandler(update: Update, context: CallbackContext):
     description = 'Send this FurAffinity link!'
     answer = [InlineQueryResultArticle(str(uuid.uuid4()), title, InputTextMessageContent(finalLink), thumbnail_url=thumbUrl, description=description)]
     await update.inline_query.answer(answer)
+
+# async def genericTracker(update: Update, context: CallbackContext):
+#     decomposedLink = context.match.string.split('?')
+#     decomposedArguments = decomposedLink[1].split('&')
+#     url = decomposedLink[0]
+#     decomposedArguments.pop(decomposedArguments.index(context.match.group()))
+#     allowedArguments = decomposedArguments
+#     if not allowedArguments:
+#         await update.message.reply_text(url) 
+#     else:
+#         url += allowedArguments
+#         await update.message.reply_text(url)
