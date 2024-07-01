@@ -38,11 +38,11 @@ async def help(update: Update, context: CallbackContext) -> None:
 
 async def support(update: Update, context: CallbackContext) -> None:
     botStatus.logEvent()
-    await update.message.reply_text("Currently supported platforms for embedding are: Twitter, TikTok, Instagram and Furaffinity.\nI can also remove URL trackers from Spotify and Youtube links.")
+    await update.message.reply_text("Currently supported platforms for embedding are: Twitter, TikTok, Instagram and Furaffinity.")#\nI can also remove URL trackers from Spotify and Youtube links.
     
 async def privacy(update: Update, context: CallbackContext) -> None:
     botStatus.logEvent()
-    await update.message.reply_text("This bot keeps no data about how you use it. No user data, links or messages are logged.\nThis bot does not have ANY association with the people responsible for the embedding services used.")
+    await update.message.reply_text("This bot keeps no data about how you use it. No user data, links or messages are logged.\nThis bot does not have ANY association with the people responsible for the embedding services used, or with the Social Media Platforms supported.")
 
 async def log(update: Update, context: CallbackContext) -> None:
     response = botStatus.getFormattedStatistics()
@@ -53,8 +53,9 @@ async def git(update: Update, context: CallbackContext) -> None:
     await update.message.reply_text(response)
 
 async def errorHandler(update: Update, context: CallbackContext) -> None:
+    botStatus.logEvent()
     replyParams = ReplyParameters(update.message.id)
-    await update.message.reply_text("That doesn't seem to be a valid link or command.\nCurrently supported platforms for embedding are: Twitter, TikTok, Instagram and Furaffinity.\nI can also remove URL trackers from Spotify and Youtube links.", reply_parameters=replyParams)
+    await update.message.reply_text("That doesn't seem to be a valid link or command.\nCurrently supported platforms for embedding are: Twitter, TikTok, Instagram and Furaffinity.", reply_parameters=replyParams)
 
 async def healthPing(context: CallbackContext):
     requests.get(PING_URL, timeout=1)
