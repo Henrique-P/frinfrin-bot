@@ -109,6 +109,7 @@ async def privateMessage(update: Update, context: CallbackContext) -> None:
     elif response == -1:
         await update.message.reply_text("This URL is either invalid or the content is private.")
         return
+    await update.message.delete()
     await update.message.reply_text(response)
 
 async def healthPing(context: CallbackContext):
