@@ -84,8 +84,8 @@ async def inlineMessage(update: Update, context: CallbackContext) -> None:
 async def privateMessage(update: Update, context: CallbackContext) -> None:
     if not update.message.text:
         return
-    message = update.message.text
     botStatus.logEvent()
+    message = update.message.text
     if re.search(r'(twitter|x)\.com/.+/status/[0-9]+', message):
         response = embed.twitter(message)
     elif re.search(r'tiktok\.com/.+', message):
@@ -109,8 +109,8 @@ async def privateMessage(update: Update, context: CallbackContext) -> None:
     elif response == -1:
         await update.message.reply_text("This URL is either invalid or the content is private.")
         return
-    await update.message.delete()
     await update.message.reply_text(response)
+    await update.message.delete()
 
 async def healthPing(context: CallbackContext):
     requests.get(PING_URL, timeout=1)
@@ -130,7 +130,6 @@ def main() -> None:
         application.run_webhook(listen='0.0.0.0', port=PORT, secret_token=WEBHOOK_TOKEN, webhook_url=f"{WEBHOOK_URL}:{PORT}")
     else:
         application.run_webhook(listen='0.0.0.0', port=PORT, secret_token=WEBHOOK_TOKEN, key=KEY_PATH, cert=CERT_PATH, webhook_url=f"{WEBHOOK_URL}:{PORT}")
-    
 
 if __name__ == '__main__':
     main()
