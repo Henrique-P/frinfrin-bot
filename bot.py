@@ -126,10 +126,10 @@ def main() -> None:
     application.add_handler(CommandHandler("privacy", privacy))
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, privateMessage))
     application.add_handler(InlineQueryHandler(inlineMessage))
-    if not KEY_PATH:
-        application.run_webhook(listen='0.0.0.0', port=PORT, secret_token=WEBHOOK_TOKEN, webhook_url=f"{WEBHOOK_URL}:{PORT}")
-    else:
+    if KEY_PATH:
         application.run_webhook(listen='0.0.0.0', port=PORT, secret_token=WEBHOOK_TOKEN, key=KEY_PATH, cert=CERT_PATH, webhook_url=f"{WEBHOOK_URL}:{PORT}")
+    else:
+        application.run_webhook(listen='0.0.0.0', port=PORT, secret_token=WEBHOOK_TOKEN, webhook_url=f"{WEBHOOK_URL}:{PORT}")
 
 if __name__ == '__main__':
     main()
