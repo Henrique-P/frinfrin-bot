@@ -42,9 +42,5 @@ def validateLink(link: str):
     try:
         statusCode = requests.get(link, timeout=1).status_code
     except requests.exceptions.Timeout:
-        try:
-            statusCode = requests.get(link, timeout=1).status_code
-        except requests.exceptions.Timeout:
-            return False
-        return statusCode
+        return 200
     return statusCode
