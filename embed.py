@@ -6,7 +6,7 @@ trackerRegexPattern = r'si=[^&]*&?|igsh=[^&]*&?'
 def twitter(originalLink: str):
     postLink = re.search(r'[^/]+/status/[0-9]+', originalLink).group()
     apiLink = "https://api.fxtwitter.com/" + postLink
-    statusCode = requests.get(apiLink, timeout=1).status_code
+    statusCode = validateLink(apiLink)
     if statusCode != 200:
         return -1
     else:
@@ -37,3 +37,10 @@ def trackerRemoval(originalLink: str):
     cleanLink = re.sub(trackerRegexPattern,"", originalLink)
     cleanLink = re.sub(r'\?$','', cleanLink)
     return cleanLink
+
+def validateLink(link: str):
+    try:
+        statusCode = requests.get(link, timeout=1).status_code
+    except requests.exceptions.Timeout:
+        return 200
+    return statusCode
