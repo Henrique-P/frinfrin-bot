@@ -33,6 +33,11 @@ def furAffinity(originalLink: str):
     finalLink = "https://www.fxfuraffinity.net/view/" + postLink
     return finalLink
 
+def bsky(originalLink: str):
+    postLink = originalLink.split(".app/profile/", 1)[1]
+    finalLink = "https://fxbsky.app/profile/" + postLink
+    return finalLink
+
 def trackerRemoval(originalLink: str):
     cleanLink = re.sub(trackerRegexPattern,"", originalLink)
     cleanLink = re.sub(r'\?$','', cleanLink)
