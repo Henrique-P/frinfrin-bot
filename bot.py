@@ -66,6 +66,10 @@ async def inlineMessage(update: Update, context: CallbackContext) -> None:
         response = embed.insta(query)
         thumbUrl = ''
         title = "Instagram"
+    elif re.search(r'bsky\.app/profile/.+', query):
+        response = embed.bsky(query)
+        thumbUrl = ''
+        title = "BlueSky"
     elif re.search(r'furaffinity\.net/view/.+', query):
         response = embed.furAffinity(query)
         thumbUrl = 'https://logos-world.net/wp-content/uploads/2024/02/FurAffinity-Logo-500x281.png'
