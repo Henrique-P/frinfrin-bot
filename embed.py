@@ -45,7 +45,7 @@ def trackerRemoval(originalLink: str):
 
 def validateLink(link: str):
     try:
-        statusCode = requests.get(link, timeout=1).status_code
+        statusCode = requests.get(link, timeout=2).status_code
     except requests.exceptions.Timeout:
         return 200
     return statusCode
