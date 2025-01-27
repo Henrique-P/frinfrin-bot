@@ -1,5 +1,6 @@
 import requests
 import re
+import httpx
 
 trackerRegexPattern = r'si=[^&]*&?|igsh=[^&]*&?'
 
@@ -46,6 +47,6 @@ def trackerRemoval(originalLink: str):
 def validateLink(link: str):
     try:
         statusCode = requests.get(link, timeout=2).status_code
-    except requests.exceptions.Timeout:
+    except httpx.ConnectTimeout:
         return 200
     return statusCode
