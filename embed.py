@@ -6,12 +6,12 @@ trackerRegexPattern = r'si=[^&]*&?|igsh=[^&]*&?'
 
 def twitter(originalLink: str):
     postLink = re.search(r'[^/]+/status/[0-9]+', originalLink).group()
-    apiLink = "https://api.fxtwitter.com/" + postLink
-    statusCode = validateLink(apiLink)
-    if statusCode != 200:
-        return -1
-    else:
-        return "https://fixupx.com/" + postLink
+    # apiLink = "https://api.fxtwitter.com/" + postLink
+    # statusCode = validateLink(apiLink)
+    # if statusCode != 200:
+    #     return -1
+    # else:
+    return "https://fixupx.com/" + postLink
 
 def tiktok(originalLink: str):
     if re.search(r'vm\.tiktok\.com/.+|tiktok\.com/t/.+',originalLink):
