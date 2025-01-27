@@ -66,6 +66,10 @@ async def inlineMessage(update: Update, context: CallbackContext) -> None:
         response = embed.insta(query)
         thumbUrl = ''
         title = "Instagram"
+    elif re.search(r'bsky\.app/profile/.+', query):
+        response = embed.bsky(query)
+        thumbUrl = ''
+        title = "BlueSky"
     elif re.search(r'furaffinity\.net/view/.+', query):
         response = embed.furAffinity(query)
         thumbUrl = 'https://logos-world.net/wp-content/uploads/2024/02/FurAffinity-Logo-500x281.png'
@@ -94,10 +98,12 @@ async def privateMessage(update: Update, context: CallbackContext) -> None:
         response = embed.insta(message)
     elif re.search(r'furaffinity\.net/view/.+', message):
         response = embed.furAffinity(message)
+    elif re.search(r'bsky\.app/profile/.+', message):
+        response = embed.bsky(message)
     elif re.search(embed.trackerRegexPattern, message):
         response = embed.trackerRemoval(message)
     else:
-        await update.message.reply_text("Message not recognized. Try sending me a Instagram, Twitter, Furaffinity or TikTok link and I will embed and/or remove any trackers.")
+        await update.message.reply_text("Message not recognized. Try sending me a Instagram, Twitter, Furaffinity, Bsky or TikTok link and I will embed and/or remove any trackers.")
         return
     if message == response:
         await update.message.reply_text("Nothing to do with this link.")
