@@ -25,8 +25,6 @@ async def tiktok(update: Update, context: CallbackContext):
             postLink = re.search(r'@[^/]+/video/[0-9]+', response.url)
         else:
             postLink = re.search(r'@[^/]+/video/[0-9]+', postId)
-        if not postLink:
-            return
         await update.effective_sender.send_message("https://fixtiktok.com/" + postLink.group())
 
 async def furAffinity(update: Update, context: CallbackContext):

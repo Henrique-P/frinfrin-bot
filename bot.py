@@ -6,10 +6,11 @@ import os
 import dotenv
 from botInfo import botInfo
 import embed
+import json
 
 if 'TOKEN' not in os.environ:
     dotenv.load_dotenv()
-
+json.load("./bot-text-messages.json")
 TOKEN = os.getenv('TOKEN')
 WEBHOOK_TOKEN = os.getenv('WEBHOOK_TOKEN')
 WEBHOOK_URL = os.getenv('WEBHOOK_URL')
@@ -25,23 +26,23 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+botNotes = json.loads(open("bot-text-messages.json", "r").read())
+
 async def start(update: Update, context: CallbackContext) -> None:
     botStatus.logEvent()
     await update.message.reply_text(f"Hello, {update.effective_user.first_name}!\nSee /support for all the supported medias.\nFor use help, click here: /help\nYou can also check this channel if you want to know more about this bot's development:\nhttps://t.me/FrinFrinNews")
     
 async def help(update: Update, context: CallbackContext) -> None:
     botStatus.logEvent()
-    await update.message.reply_text("Alrighty. Lets walk you through this scenario: You were browsing twitter and sent your friend this post:\nhttps://twitter.com/FopsHourly/status/1806281425915883661")
-    await update.message.reply_text("Notice that despite the content being a video, twitter only allows you both to preview a static frame of the video. Now lets try using a service to embed the video in this link:\nhttps://fxtwitter.com/FopsHourly/status/1806281425915883661")
-    await update.message.reply_text("Much better, right? Now you can try sending me a link for one of the supported social medias and I'll reply to you with the embedded link.\nFor full functionality guide or suggestions please contact @Yolfrin anytime.")
+    await update.message.reply_text(botNotes["privacyNote"])
 
 async def support(update: Update, context: CallbackContext) -> None:
     botStatus.logEvent()
-    await update.message.reply_text("Currently supported platforms for embedding are: Twitter, TikTok, Instagram and Furaffinity.\nI can also remove URL trackers from Spotify and Youtube links.")
+    await update.message.reply_text(botNotes["helpNote"])
     
 async def privacy(update: Update, context: CallbackContext) -> None:
     botStatus.logEvent()
-    await update.message.reply_text("This bot keeps no data about how you use it. No user data, links or messages are logged.\nThis bot does not have ANY association with the people responsible for the embedding services used.")
+    await update.message.reply_text(botNotes["privacyNote"])
 
 async def log(update: Update, context: CallbackContext) -> None:
     response = botStatus.getFormattedStatistics()
