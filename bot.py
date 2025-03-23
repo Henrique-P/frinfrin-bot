@@ -118,6 +118,28 @@ async def privateMessage(update: Update, context: CallbackContext) -> None:
     await update.message.reply_text(response)
     await update.message.delete()
 
+async def channelMessage(update: Update, context: CallbackContext):
+    if not update.channel_post.text:
+        return
+    botStatus.logEvent()
+    message = update.channel_post.text
+    if re.search(r'(twitter|x)\.com/.+/status/[0-9]+', message):
+        response = embed.twitter(message)
+    elif re.search(r'tiktok\.com/.+', message):
+        response = embed.tiktok(message)
+    elif re.search(r'instagram\.com/reel/.+', message):
+        response = embed.insta(message)
+    elif re.search(r'furaffinity\.net/view/.+', message):
+        response = embed.furAffinity(message)
+    elif re.search(r'bsky\.app/profile/.+', message):
+        response = embed.bsky(message)
+    elif re.search(embed.trackerRegexPattern, message):
+        response = embed.trackerRemoval(message)
+    else:
+        return
+    await update.channel_post.reply_text(response)
+    await update.channel_post.delete()
+
 async def healthPing(context: CallbackContext):
     requests.get(PING_URL, timeout=1)
 
@@ -130,6 +152,7 @@ def main() -> None:
     application.add_handler(CommandHandler("support", support))
     application.add_handler(CommandHandler("log", log))
     application.add_handler(CommandHandler("privacy", privacy))
+    application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, filters.ChatType.CHANNEL, channelMessage))
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, privateMessage))
     application.add_handler(InlineQueryHandler(inlineMessage))
     if KEY_PATH:
