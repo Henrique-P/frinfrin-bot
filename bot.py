@@ -152,7 +152,7 @@ def main() -> None:
     application.add_handler(CommandHandler("support", support))
     application.add_handler(CommandHandler("log", log))
     application.add_handler(CommandHandler("privacy", privacy))
-    application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, filters.ChatType.CHANNEL, channelMessage))
+    application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND & filters.ChatType.CHANNEL, channelMessage))
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, privateMessage))
     application.add_handler(InlineQueryHandler(inlineMessage))
     if KEY_PATH:
