@@ -1,12 +1,12 @@
 from uuid import uuid4
 import requests
 import re
-
+from telegram.ext import CallbackContext
 from telegram import InlineQueryResultArticle, InputTextMessageContent, Update
 
 #trackerRegexPattern = r'si=[^&]*&?|igsh=[^&]*&?'
 
-async def twitter(update: Update):
+async def twitter(update: Update, context: CallbackContext):
     if update.message == True:
         postId = update.message.text.split(".com/status/", 1)[1]
         await update.message.reply_text("https://fixupx.com/" + postId)
