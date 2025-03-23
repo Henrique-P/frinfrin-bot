@@ -1,16 +1,10 @@
 import requests
 import re
-import httpx
 
 trackerRegexPattern = r'si=[^&]*&?|igsh=[^&]*&?'
 
 def twitter(originalLink: str):
     postLink = re.search(r'[^/]+/status/[0-9]+', originalLink).group()
-    # apiLink = "https://api.fxtwitter.com/" + postLink
-    # statusCode = validateLink(apiLink)
-    # if statusCode != 200:
-    #     return -1
-    # else:
     return "https://fixupx.com/" + postLink
 
 def tiktok(originalLink: str):
@@ -43,10 +37,3 @@ def trackerRemoval(originalLink: str):
     cleanLink = re.sub(trackerRegexPattern,"", originalLink)
     cleanLink = re.sub(r'\?$','', cleanLink)
     return cleanLink
-
-def validateLink(link: str):
-    try:
-        statusCode = requests.get(link, timeout=2).status_code
-    except httpx.ConnectTimeout:
-        return 200
-    return statusCode
