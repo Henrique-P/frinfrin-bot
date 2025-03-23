@@ -137,6 +137,8 @@ async def channelMessage(update: Update, context: CallbackContext):
         response = embed.trackerRemoval(message)
     else:
         return
+    if message == response:
+        return
     await update.effective_sender.send_message(response)
     #await update.channel_post.edit_text(response)
     await update.channel_post.delete()
