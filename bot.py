@@ -157,7 +157,7 @@ def main() -> None:
     application.add_handler(CommandHandler("privacy", privacy))
     #application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND & filters.ChatType.CHANNEL, channelMessage))
     application.add_handler(MessageHandler(filters.Regex(r'(twitter|x)\.com/.+/status/[0-9]+'), embed.twitter))
-    #application.add_handler(InlineQueryHandler(inlineMessage))
+    application.add_handler(InlineQueryHandler(filters.Regex(r'(twitter|x)\.com/.+/status/[0-9]+'), embed.twitter))
     if KEY_PATH:
         application.run_webhook(listen='0.0.0.0', port=PORT, secret_token=WEBHOOK_TOKEN, key=KEY_PATH, cert=CERT_PATH, webhook_url=f"{WEBHOOK_URL}:{PORT}")
     else:
