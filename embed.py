@@ -7,13 +7,13 @@ from telegram import InlineQueryResultArticle, InputTextMessageContent, Update
 #trackerRegexPattern = r'si=[^&]*&?|igsh=[^&]*&?'
 
 async def twitter(update: Update, context: CallbackContext):
-    if update.message.text == True:
+    if update.message == True:
         postId = update.message.text.split(".com/status/", 1)[1]
         await update.message.reply_text("https://fixupx.com/" + postId)
-    elif update.channel_post.text == True:
+    elif update.channel_post == True:
         postId = update.channel_post.text.split(".com/status/", 1)[1]
         await update.effective_sender.send_message("https://fixupx.com/" + postId)
-    elif update.inline_query.query == True:
+    elif update.inline_query == True:
         postId = update.inline_query.query.split(".com/status/", 1)[1]
         answer = [InlineQueryResultArticle(str(uuid4()), 'X', InputTextMessageContent("https://fixupx.com/" + postId), thumbnail_url='https://cdn.freelogovectors.net/wp-content/uploads/2023/07/twitter-x-logo-freelogovectors.net_.png')]
         await update.inline_query.answer(answer)
