@@ -9,6 +9,7 @@ async def twitter(update: Update, context: CallbackContext):
     if update.effective_message:
         postId = update.effective_message.text.split(".com/", 1)[1]
         await update.effective_sender.send_message("https://fixupx.com/" + postId)
+        await update.effective_message.delete()
         return
     # elif update.inline_query:
     #     postId = update.inline_query.query.split(".com/", 1)[1]
@@ -28,23 +29,14 @@ async def tiktok(update: Update, context: CallbackContext):
             return
         await update.effective_sender.send_message("https://fixtiktok.com/" + postLink.group())
 
-# def insta(originalLink: str):
-#     postLink = originalLink.split(".com/reel/", 1)[1]
-#     postLink = postLink.split("?")[0]
-#     finalLink = "https://ddinstagram.com/reel/" + postLink
-#     return finalLink
+async def furAffinity(update: Update, context: CallbackContext):
+    if update.effective_message:
+        postId = update.effective_message.text.split("view/", 1)[1]
+        await update.effective_sender.send_message("https://fxfuraffinity.net/view/" + postId)
+        return
 
-# def furAffinity(originalLink: str):
-#     postLink = originalLink.split(".net/view/", 1)[1]
-#     finalLink = "https://www.fxfuraffinity.net/view/" + postLink
-#     return finalLink
-
-# def bsky(originalLink: str):
-#     postLink = originalLink.split(".app/profile/", 1)[1]
-#     finalLink = "https://fxbsky.app/profile/" + postLink
-#     return finalLink
-
-# def trackerRemoval(originalLink: str):
-#     cleanLink = re.sub(trackerRegexPattern,"", originalLink)
-#     cleanLink = re.sub(r'\?$','', cleanLink)
-#     return cleanLink
+async def bsky(update: Update, context: CallbackContext):
+    if update.effective_message:
+        postId = update.effective_message.text.split("profile/", 1)[1]
+        await update.effective_sender.send_message("https://fxbsky.app/profile/" + postId)
+        return
