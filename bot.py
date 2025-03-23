@@ -137,7 +137,8 @@ async def channelMessage(update: Update, context: CallbackContext):
         response = embed.trackerRemoval(message)
     else:
         return
-    await update.channel_post.reply_text(response)
+    await update.effective_sender.send_message(response)
+    #await update.channel_post.edit_text(response)
     await update.channel_post.delete()
 
 async def healthPing(context: CallbackContext):
