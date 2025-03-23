@@ -1,13 +1,11 @@
 import logging
-import re
 import requests
-from telegram import InlineQueryResultArticle, InputTextMessageContent, Update
-from telegram.ext import CommandHandler, CallbackContext, Application, MessageHandler, filters, InlineQueryHandler
+from telegram import Update
+from telegram.ext import CommandHandler, CallbackContext, Application, MessageHandler, filters
 import os
 import dotenv
 from botInfo import botInfo
 import embed
-from uuid import uuid4
 
 if 'TOKEN' not in os.environ:
     dotenv.load_dotenv()
