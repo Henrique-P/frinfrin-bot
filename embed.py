@@ -3,17 +3,18 @@ import requests
 import re
 from telegram.ext import CallbackContext
 from telegram import InlineQueryResultArticle, InputTextMessageContent, Update
+from bot import logger
 import logging
 #trackerRegexPattern = r'si=[^&]*&?|igsh=[^&]*&?'
 
 async def twitter(update: Update, context: CallbackContext):
     if update.message == True:
-        logging.log(logging.INFO,'debug-private chat')
+        logger.log(logging.INFO,'debug-private chat')
         postId = update.message.text.split(".com/", 1)[1]
         await update.message.reply_text("https://fixupx.com/" + postId)
         return
     elif update.channel_post == True:
-        logging.log(logging.INFO,'debug-channel chat')
+        logger.log(logging.INFO,'debug-channel chat')
         postId = update.channel_post.text.split(".com/", 1)[1]
         await update.effective_sender.send_message("https://fixupx.com/" + postId)
         return
