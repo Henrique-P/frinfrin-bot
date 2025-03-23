@@ -26,7 +26,7 @@ async def tiktok(update: Update, context: CallbackContext):
             postLink = re.search(r'@[^/]+/video/[0-9]+', postId)
         if not postLink:
             return
-        await update.effective_sender.send_message("https://fixuptiktok.com/" + postLink.group())
+        await update.effective_sender.send_message("https://fixtiktok.com/" + postLink.group())
 
 # def insta(originalLink: str):
 #     postLink = originalLink.split(".com/reel/", 1)[1]
