@@ -10,7 +10,6 @@ import json
 
 if 'TOKEN' not in os.environ:
     dotenv.load_dotenv()
-json.load("./bot-text-messages.json")
 TOKEN = os.getenv('TOKEN')
 WEBHOOK_TOKEN = os.getenv('WEBHOOK_TOKEN')
 WEBHOOK_URL = os.getenv('WEBHOOK_URL')
