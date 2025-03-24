@@ -1,52 +1,63 @@
+from uuid import uuid4
 import requests
 import re
-import httpx
+from telegram.ext import CallbackContext
+from telegram import InlineQueryResultArticle, InputTextMessageContent, Update
+#trackerRegexPattern = r'si=[^&]*&?|igsh=[^&]*&?'
 
-trackerRegexPattern = r'si=[^&]*&?|igsh=[^&]*&?'
+async def twitter(update: Update, context: CallbackContext):
+    if update.effective_message:
+        postId = update.effective_message.text.split(".com/", 1)[1]
+        await update.effective_sender.send_message("https://fixupx.com/" + postId)
+        await update.effective_message.delete()
+        return
+    elif update.inline_query:
+        if update.inline_query.query:
+            postId = update.inline_query.query.split(".com/", 1)[1]
+            answer = [InlineQueryResultArticle(str(uuid4()), 'X', InputTextMessageContent("https://fixupx.com/" + postId), thumbnail_url='https://cdn.freelogovectors.net/wp-content/uploads/2023/07/twitter-x-logo-freelogovectors.net_.png')]
+            await update.inline_query.answer(answer)
 
-def twitter(originalLink: str):
-    postLink = re.search(r'[^/]+/status/[0-9]+', originalLink).group()
-    # apiLink = "https://api.fxtwitter.com/" + postLink
-    # statusCode = validateLink(apiLink)
-    # if statusCode != 200:
-    #     return -1
-    # else:
-    return "https://fixupx.com/" + postLink
+async def tiktok(update: Update, context: CallbackContext):
+    if update.effective_message:
+        postId = update.effective_message.text
+        if re.search(r'vm\.tiktok\.com/.+|tiktok\.com/t/.+', postId):
+            response = requests.get(postId, timeout=1)
+            postLink = re.search(r'@[^/]+/video/[0-9]+', response.url)
+        else:
+            postLink = re.search(r'@[^/]+/video/[0-9]+', postId)
+        await update.effective_sender.send_message("https://fixtiktok.com/" + postLink.group())
+        await update.effective_message.delete()
+    elif update.inline_query:
+        if update.inline_query.query:
+            postId = update.inline_query.query
+            if re.search(r'vm\.tiktok\.com/.+|tiktok\.com/t/.+', postId):
+                response = requests.get(postId, timeout=1)
+                postLink = re.search(r'@[^/]+/video/[0-9]+', response.url)
+            else:
+                postLink = re.search(r'@[^/]+/video/[0-9]+', postId)
+                answer = [InlineQueryResultArticle(str(uuid4()), 'TikTok', InputTextMessageContent("https://fixtiktok.com/" + postId), thumbnail_url='')]
+                await update.inline_query.answer(answer)
 
-def tiktok(originalLink: str):
-    if re.search(r'vm\.tiktok\.com/.+|tiktok\.com/t/.+',originalLink):
-        response = requests.get(originalLink, timeout=1)
-        postLink = re.search(r'@[^/]+/video/[0-9]+', response.url)
-    else:
-        postLink = re.search(r'@[^/]+/video/[0-9]+', originalLink)
-    if not postLink:
-        return -1
-    return "https://fixuptiktok.com/" + postLink.group()
+async def furAffinity(update: Update, context: CallbackContext):
+    if update.effective_message:
+        postId = update.effective_message.text.split("view/", 1)[1]
+        await update.effective_sender.send_message("https://fxfuraffinity.net/view/" + postId)
+        await update.effective_message.delete()
+        return
+    elif update.inline_query:
+        if update.inline_query.query:
+            postId = update.inline_query.query.split("view/", 1)[1]
+            answer = [InlineQueryResultArticle(str(uuid4()), 'FurAffinity', InputTextMessageContent("https://fxfuraffinity.net/view/" + postId), thumbnail_url='')]
+            await update.inline_query.answer(answer)
 
-def insta(originalLink: str):
-    postLink = originalLink.split(".com/reel/", 1)[1]
-    postLink = postLink.split("?")[0]
-    finalLink = "https://ddinstagram.com/reel/" + postLink
-    return finalLink
-
-def furAffinity(originalLink: str):
-    postLink = originalLink.split(".net/view/", 1)[1]
-    finalLink = "https://www.fxfuraffinity.net/view/" + postLink
-    return finalLink
-
-def bsky(originalLink: str):
-    postLink = originalLink.split(".app/profile/", 1)[1]
-    finalLink = "https://fxbsky.app/profile/" + postLink
-    return finalLink
-
-def trackerRemoval(originalLink: str):
-    cleanLink = re.sub(trackerRegexPattern,"", originalLink)
-    cleanLink = re.sub(r'\?$','', cleanLink)
-    return cleanLink
-
-def validateLink(link: str):
-    try:
-        statusCode = requests.get(link, timeout=2).status_code
-    except httpx.ConnectTimeout:
-        return 200
-    return statusCode
+async def bsky(update: Update, context: CallbackContext):
+    if update.effective_message:
+        postId = update.effective_message.text.split("profile/", 1)[1]
+        await update.effective_sender.send_message("https://fxbsky.app/profile/" + postId)
+        await update.effective_message.delete()
+        return
+    elif update.inline_query:
+        if update.inline_query.query:
+            postId = update.inline_query.query.split("profile/", 1)[1]
+            answer = [InlineQueryResultArticle(str(uuid4()), 'Bluesky', InputTextMessageContent("https://fxbsky.app/profile/" + postId), thumbnail_url='')]
+            await update.inline_query.answer(answer)
