@@ -21,7 +21,7 @@ PING_URL = os.getenv('PING_URL')
 botStatus = botInfo()
 
 logging.basicConfig(
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.WARN
 )
 logger = logging.getLogger(__name__)
 
