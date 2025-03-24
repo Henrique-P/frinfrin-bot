@@ -33,11 +33,11 @@ async def start(update: Update, context: CallbackContext) -> None:
     
 async def help(update: Update, context: CallbackContext) -> None:
     botStatus.logEvent()
-    await update.message.reply_text(botNotes["privacyNote"])
+    await update.message.reply_text(botNotes["helpNote"])
 
 async def support(update: Update, context: CallbackContext) -> None:
     botStatus.logEvent()
-    await update.message.reply_text(botNotes["helpNote"])
+    await update.message.reply_text(botNotes["supportNote"])
     
 async def privacy(update: Update, context: CallbackContext) -> None:
     botStatus.logEvent()
