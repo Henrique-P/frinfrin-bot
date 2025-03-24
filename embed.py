@@ -26,6 +26,7 @@ async def tiktok(update: Update, context: CallbackContext):
         else:
             postLink = re.search(r'@[^/]+/video/[0-9]+', postId)
         await update.effective_sender.send_message("https://fixtiktok.com/" + postLink.group())
+        await update.effective_message.delete()
     elif update.inline_query:
         if update.inline_query.query:
             postId = update.inline_query.query
@@ -41,6 +42,7 @@ async def furAffinity(update: Update, context: CallbackContext):
     if update.effective_message:
         postId = update.effective_message.text.split("view/", 1)[1]
         await update.effective_sender.send_message("https://fxfuraffinity.net/view/" + postId)
+        await update.effective_message.delete()
         return
     elif update.inline_query:
         if update.inline_query.query:
@@ -52,6 +54,7 @@ async def bsky(update: Update, context: CallbackContext):
     if update.effective_message:
         postId = update.effective_message.text.split("profile/", 1)[1]
         await update.effective_sender.send_message("https://fxbsky.app/profile/" + postId)
+        await update.effective_message.delete()
         return
     elif update.inline_query:
         if update.inline_query.query:
