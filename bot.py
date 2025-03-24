@@ -30,7 +30,7 @@ botNotes = json.loads(open("bot-text-messages.json", "r").read())
 
 async def start(update: Update, context: CallbackContext) -> None:
     botStatus.logEvent()
-    await update.message.reply_text(f"Hello, {update.effective_user.first_name}!\nSee /support for all the supported medias.\nFor use help, click here: /help\nYou can also check this channel if you want to know more about this bot's development:\nhttps://t.me/FrinFrinNews")
+    await update.message.reply_text(botNotes["welcomeNote"].format(update.effective_user))
     
 async def help(update: Update, context: CallbackContext) -> None:
     botStatus.logEvent()
