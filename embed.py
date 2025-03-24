@@ -59,5 +59,5 @@ async def bsky(update: Update, context: CallbackContext):
     elif update.inline_query:
         if update.inline_query.query:
             postId = update.inline_query.query.split("profile/", 1)[1]
-            answer = [InlineQueryResultArticle(str(uuid4()), 'X', InputTextMessageContent("https://fxbsky.app/profile/" + postId), thumbnail_url='')]
+            answer = [InlineQueryResultArticle(str(uuid4()), 'Bluesky', InputTextMessageContent("https://fxbsky.app/profile/" + postId), thumbnail_url='')]
             await update.inline_query.answer(answer)
