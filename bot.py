@@ -29,7 +29,7 @@ botNotes = json.loads(open("bot-text-messages.json", "r").read())
 
 async def start(update: Update, context: CallbackContext) -> None:
     botStatus.logEvent()
-    await update.message.reply_text(botNotes["welcomeNote"].format(update.effective_user))
+    await update.message.reply_text(botNotes["welcomeNote"].format(update.effective_user.first_name))
     
 async def help(update: Update, context: CallbackContext) -> None:
     botStatus.logEvent()
