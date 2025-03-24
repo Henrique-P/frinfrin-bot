@@ -1,7 +1,7 @@
 import logging
 import requests
 from telegram import Update
-from telegram.ext import CommandHandler, CallbackContext, Application, MessageHandler, filters
+from telegram.ext import CommandHandler, InlineQueryHandler, CallbackContext, Application, MessageHandler, filters
 import os
 import dotenv
 from botInfo import botInfo
@@ -63,7 +63,10 @@ def main() -> None:
     application.add_handler(MessageHandler(filters.Regex(r'tiktok\.com/.+') & filters.TEXT & ~filters.COMMAND, embed.tiktok))
     application.add_handler(MessageHandler(filters.Regex(r'bsky\.app/profile/.+') & filters.TEXT & ~filters.COMMAND, embed.bsky))
     application.add_handler(MessageHandler(filters.Regex(r'furaffinity\.net/view/.+') & filters.TEXT & ~filters.COMMAND, embed.furAffinity))
-    #application.add_handler(InlineQueryHandler(filters.Regex(r'(twitter|x)\.com/.+/status/[0-9]+'), embed.twitter))
+    application.add_handler(InlineQueryHandler(filters.Regex(pattern=r'(twitter|x)\.com/.+/status/[0-9]+'), callback=embed.twitter))
+    application.add_handler(InlineQueryHandler(filters.Regex(pattern=r'tiktok\.com/.+'), callback=embed.tiktok))
+    application.add_handler(InlineQueryHandler(filters.Regex(pattern=r'bsky\.app/profile/.+'), callback=embed.bsky))
+    application.add_handler(InlineQueryHandler(filters.Regex(pattern=r'furaffinity\.net/view/.+'), callback=embed.furAffinity))
     if KEY_PATH:
         application.run_webhook(listen='0.0.0.0', port=PORT, secret_token=WEBHOOK_TOKEN, key=KEY_PATH, cert=CERT_PATH, webhook_url=f"{WEBHOOK_URL}:{PORT}")
     else:
