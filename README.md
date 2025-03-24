@@ -1,6 +1,6 @@
 # frinfrin-bot
 <img src="https://healthchecks.io/badge/23227592-d434-4fe4-9fb2-c9a4e7/H_EPQhcZ-2.svg" alt="healthchecks.io">
-Created with the Python-Telegram-Bot wrapper. https://python-telegram-bot.org
+Created with [Python-Telegram-Bot](https://python-telegram-bot.org). 
 
 This is a telegram bot that accepts links via direct message or inline mode and embeds them using known services(eg. fxtwitter). It also removes trackers.
 
