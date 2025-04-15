@@ -4,12 +4,13 @@ import re
 from telegram.ext import CallbackContext
 from telegram import InlineQueryResultArticle, InputTextMessageContent, Update
 #trackerRegexPattern = r'si=[^&]*&?|igsh=[^&]*&?'
-from bot import botStatus
+from bot import botStatus, wasBotSleeping
 
 async def twitter(update: Update, context: CallbackContext):
     botStatus.logEvent()
     if update.effective_message:
         postId = update.effective_message.text.split(".com/", 1)[1]
+        await wasBotSleeping(update)
         await update.effective_sender.send_message("https://fixupx.com/" + postId)
         await update.effective_message.delete()
         return
@@ -28,6 +29,7 @@ async def tiktok(update: Update, context: CallbackContext):
             postLink = re.search(r'@[^/]+/video/[0-9]+', response.url)
         else:
             postLink = re.search(r'@[^/]+/video/[0-9]+', postId)
+        await wasBotSleeping(update)
         await update.effective_sender.send_message("https://fixtiktok.com/" + postLink.group())
         await update.effective_message.delete()
     elif update.inline_query:
@@ -45,6 +47,7 @@ async def furAffinity(update: Update, context: CallbackContext):
     botStatus.logEvent()
     if update.effective_message:
         postId = update.effective_message.text.split("view/", 1)[1]
+        await wasBotSleeping(update)
         await update.effective_sender.send_message("https://fxfuraffinity.net/view/" + postId)
         await update.effective_message.delete()
         return
@@ -58,6 +61,7 @@ async def bsky(update: Update, context: CallbackContext):
     botStatus.logEvent()
     if update.effective_message:
         postId = update.effective_message.text.split("profile/", 1)[1]
+        await wasBotSleeping(update)
         await update.effective_sender.send_message("https://fxbsky.app/profile/" + postId)
         await update.effective_message.delete()
         return

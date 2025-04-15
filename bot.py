@@ -1,4 +1,5 @@
 import logging
+from datetime import timedelta, datetime, timezone
 import requests
 from telegram import Update
 from telegram.ext import CommandHandler, InlineQueryHandler, CallbackContext, Application, MessageHandler, filters
@@ -29,19 +30,8 @@ botNotes = json.loads(open("bot-text-messages.json", "r").read())
 
 async def start(update: Update, context: CallbackContext) -> None:
     botStatus.logEvent()
+    await wasBotSleeping(update)
     await update.message.reply_text(botNotes["welcomeNote"].format(update.effective_user.first_name))
-    
-async def help(update: Update, context: CallbackContext) -> None:
-    botStatus.logEvent()
-    await update.message.reply_text(botNotes["helpNote"])
-
-async def support(update: Update, context: CallbackContext) -> None:
-    botStatus.logEvent()
-    await update.message.reply_text(botNotes["supportNote"])
-    
-async def privacy(update: Update, context: CallbackContext) -> None:
-    botStatus.logEvent()
-    await update.message.reply_text(botNotes["privacyNote"])
 
 async def log(update: Update, context: CallbackContext) -> None:
     response = botStatus.getFormattedStatistics()
@@ -50,15 +40,17 @@ async def log(update: Update, context: CallbackContext) -> None:
 async def healthPing(context: CallbackContext):
     requests.get(PING_URL, timeout=1)
 
+async def wasBotSleeping(update: Update):
+    sleepTimeout = timedelta(seconds=15)
+    if (update.message.date.astimezone(timezone.utc) + sleepTimeout < datetime.now(timezone.utc)):
+        await update.message.reply_text('😴')
+
 def main() -> None:
     application = Application.builder().token(TOKEN).build()
     if PING_URL:
         application.job_queue.run_repeating(healthPing, interval=60, first=10)
     application.add_handler(CommandHandler("start", start))
-    application.add_handler(CommandHandler("help", help))
-    application.add_handler(CommandHandler("support", support))
     application.add_handler(CommandHandler("log", log))
-    application.add_handler(CommandHandler("privacy", privacy))
     application.add_handler(MessageHandler(filters.Regex(r'\b(twitter|x)\.com/.+/status/\d+') & filters.TEXT & ~filters.COMMAND, embed.twitter))
     application.add_handler(MessageHandler(filters.Regex(r'\btiktok\.com/.+') & filters.TEXT & ~filters.COMMAND, embed.tiktok))
     application.add_handler(MessageHandler(filters.Regex(r'\bbsky\.app/profile/.+') & filters.TEXT & ~filters.COMMAND, embed.bsky))
