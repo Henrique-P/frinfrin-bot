@@ -45,6 +45,11 @@ async def wasBotSleeping(update: Update):
     if (update.message.date.astimezone(timezone.utc) + sleepTimeout < datetime.now(timezone.utc)):
         await update.message.reply_text(botNotes["sleepMessage"])
 
+async def removeForward(update: Update, context: CallbackContext):
+    if (update.channel_post.forward_origin.type == 'user'):
+        return
+
+
 def main() -> None:
     application = Application.builder().token(TOKEN).build()
     if PING_URL:
@@ -55,6 +60,7 @@ def main() -> None:
     application.add_handler(MessageHandler(filters.Regex(r'\btiktok\.com/.+') & filters.TEXT & ~filters.COMMAND, embed.tiktok))
     application.add_handler(MessageHandler(filters.Regex(r'\bbsky\.app/profile/.+') & filters.TEXT & ~filters.COMMAND, embed.bsky))
     application.add_handler(MessageHandler(filters.Regex(r'\bfuraffinity\.net/view/\d+') & filters.TEXT & ~filters.COMMAND, embed.furAffinity))
+    application.add_handler(MessageHandler(filters.FORWARDED & filters.ChatType.CHANNEL, removeForward))
     application.add_handler(InlineQueryHandler(embed.twitter, r'.+(twitter|x)\.com/.+/status/\d+'))
     application.add_handler(InlineQueryHandler(embed.tiktok, r'.+tiktok\.com/.+'))
     application.add_handler(InlineQueryHandler(embed.bsky, r'.+bsky\.app/profile/.+'))
