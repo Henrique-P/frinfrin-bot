@@ -17,7 +17,6 @@ WEBHOOK_URL = os.getenv('WEBHOOK_URL')
 PORT = os.getenv('PORT')
 KEY_PATH = os.getenv('KEY_PATH')
 CERT_PATH = os.getenv('CERT_PATH')
-PING_URL = os.getenv('PING_URL')
 
 botStatus = botInfo()
 
@@ -37,9 +36,6 @@ async def log(update: Update, context: CallbackContext) -> None:
     response = botStatus.getFormattedStatistics()
     await update.message.reply_text(response)
 
-async def healthPing(context: CallbackContext):
-    requests.get(PING_URL, timeout=1)
-
 async def wasBotSleeping(update: Update):
     sleepTimeout = timedelta(seconds=15)
     if (update.message.date.astimezone(timezone.utc) + sleepTimeout < datetime.now(timezone.utc)):
@@ -47,8 +43,6 @@ async def wasBotSleeping(update: Update):
 
 def main() -> None:
     application = Application.builder().token(TOKEN).build()
-    if PING_URL:
-        application.job_queue.run_repeating(healthPing, interval=60, first=10)
     application.add_handler(CommandHandler("start", start))
     application.add_handler(CommandHandler("log", log))
     application.add_handler(MessageHandler(filters.Regex(r'\b(twitter|x)\.com/.+/status/\d+') & filters.TEXT & ~filters.COMMAND, embed.twitter))
