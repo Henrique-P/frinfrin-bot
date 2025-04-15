@@ -31,7 +31,7 @@ botNotes = json.loads(open("bot-text-messages.json", "r").read())
 async def start(update: Update, context: CallbackContext) -> None:
     botStatus.logEvent()
     await wasBotSleeping(update)
-    await update.message.reply_text(botNotes["welcomeNote"].format(update.effective_user.first_name))
+    await update.message.reply_text(botNotes["startMessage"].format(update.effective_user.first_name))
 
 async def log(update: Update, context: CallbackContext) -> None:
     response = botStatus.getFormattedStatistics()
