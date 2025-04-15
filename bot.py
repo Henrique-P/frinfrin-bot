@@ -18,6 +18,7 @@ PORT = os.getenv('PORT')
 KEY_PATH = os.getenv('KEY_PATH')
 CERT_PATH = os.getenv('CERT_PATH')
 PING_URL = os.getenv('PING_URL')
+ADMIN_ID = os.getenv('ADMIN_ID')
 
 botStatus = botInfo()
 
@@ -33,9 +34,13 @@ async def start(update: Update, context: CallbackContext) -> None:
     await wasBotSleeping(update)
     await update.message.reply_text(botNotes["startMessage"].format(update.effective_user.first_name))
 
-async def log(update: Update, context: CallbackContext) -> None:
-    response = botStatus.getFormattedStatistics()
-    await update.message.reply_text(response)
+async def adminPanel(update: Update, context: CallbackContext):
+    if(ADMIN_ID is None):
+        await update.message.reply_text('There are no admins!')
+    elif(update.effective_user.id == int(ADMIN_ID)):
+        await update.message.reply_text(botStatus.getFormattedStatistics())
+    else:
+        await update.message.reply_text('You\'re not admin!')
 
 async def healthPing(context: CallbackContext):
     requests.get(PING_URL, timeout=1)
@@ -50,7 +55,7 @@ def main() -> None:
     if PING_URL:
         application.job_queue.run_repeating(healthPing, interval=60, first=10)
     application.add_handler(CommandHandler("start", start))
-    application.add_handler(CommandHandler("log", log))
+    application.add_handler(CommandHandler("adminPanel", adminPanel))
     application.add_handler(MessageHandler(filters.Regex(r'\b(twitter|x)\.com/.+/status/\d+') & filters.TEXT & ~filters.COMMAND, embed.twitter))
     application.add_handler(MessageHandler(filters.Regex(r'\btiktok\.com/.+') & filters.TEXT & ~filters.COMMAND, embed.tiktok))
     application.add_handler(MessageHandler(filters.Regex(r'\bbsky\.app/profile/.+') & filters.TEXT & ~filters.COMMAND, embed.bsky))
