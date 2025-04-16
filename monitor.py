@@ -1,19 +1,25 @@
-from datetime import datetime, timezone
+from datetime import datetime
 import json
+
 def logRequest():
     try:
-        file = open('./logs/log.json','r')
-        tempFile = json.loads(file.read())
-        file.close()
+        # Open the file in read mode using 'with'
+        with open('./logs/log.json', 'r') as file:
+            tempFile = json.loads(file.read())
+        
+        # Append the new timestamp
         tempFile.append(datetime.now().strftime("%d-%m-%Y-%H:%M:%S"))
-        file = open('./logs/log.json','w')
-        file.write(json.dumps(tempFile))
-        file.close()
-    except FileNotFoundError: 
-        file = open('./logs/log.json','w')
-        file.write(json.dumps([datetime.now().strftime("%d-%m-%Y-%H:%M:%S")]))
-        file.close()
+        
+        # Open the file in write mode using 'with'
+        with open('./logs/log.json', 'w') as file:
+            file.write(json.dumps(tempFile))
+    
+    except FileNotFoundError:
+        # Create the file and write the timestamp if it doesn't exist
+        with open('./logs/log.json', 'w') as file:
+            file.write(json.dumps([datetime.now().strftime("%d-%m-%Y-%H:%M:%S")]))
+    
     except json.JSONDecodeError:
-        file = open('./logs/log.json','w')
-        file.write(json.dumps([datetime.now().strftime("%d-%m-%Y-%H:%M:%S")]))
-        file.close()
+        # Overwrite the file with a new array if JSON is invalid
+        with open('./logs/log.json', 'w') as file:
+            file.write(json.dumps([datetime.now().strftime("%d-%m-%Y-%H:%M:%S")]))
