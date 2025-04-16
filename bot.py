@@ -5,9 +5,9 @@ from telegram import Update
 from telegram.ext import CommandHandler, InlineQueryHandler, CallbackContext, Application, MessageHandler, filters
 import os
 import dotenv
-from botInfo import botInfo
 import embed
 import json
+import monitor
 
 if 'TOKEN' not in os.environ:
     dotenv.load_dotenv()
@@ -19,8 +19,6 @@ KEY_PATH = os.getenv('KEY_PATH')
 CERT_PATH = os.getenv('CERT_PATH')
 PING_URL = os.getenv('PING_URL')
 
-botStatus = botInfo()
-
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.WARN
 )
@@ -29,13 +27,13 @@ logger = logging.getLogger(__name__)
 botNotes = json.loads(open("bot-text-messages.json", "r").read())
 
 async def start(update: Update, context: CallbackContext) -> None:
-    botStatus.logEvent()
+    monitor.logRequest()
     await wasBotSleeping(update)
     await update.message.reply_text(botNotes["startMessage"].format(update.effective_user.first_name))
 
 async def log(update: Update, context: CallbackContext) -> None:
-    response = botStatus.getFormattedStatistics()
-    await update.message.reply_text(response)
+    #await update.message.reply_text(response)
+    return
 
 async def healthPing(context: CallbackContext):
     requests.get(PING_URL, timeout=1)
