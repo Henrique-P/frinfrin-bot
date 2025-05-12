@@ -46,7 +46,7 @@ async def wasBotSleeping(update: Update):
         await update.message.reply_text(botNotes["sleepMessage"])
 
 async def removeForward(update: Update, context: CallbackContext):
-    if (update.channel_post.forward_origin.type == 'user'):
+    if (update.channel_post.forward_origin.type in ['user', 'hidden_user']):
         await update.channel_post.copy(update.effective_chat.id)
         await update.channel_post.delete()
 
