@@ -42,6 +42,8 @@ async def healthPing(context: CallbackContext):
 
 async def wasBotSleeping(update: Update):
     sleepTimeout = timedelta(seconds=15)
+    if update.message.chat.type == 'channel':
+        return
     if (update.message.date.astimezone(timezone.utc) + sleepTimeout < datetime.now(timezone.utc)):
         await update.message.reply_text(botNotes["sleepMessage"])
 
