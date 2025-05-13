@@ -41,7 +41,7 @@ async def healthPing(context: CallbackContext):
     requests.get(PING_URL, timeout=1)
 
 async def wasBotSleeping(update: Update):
-    if update.message.chat.type == 'channel':
+    if update.channel_post:
         return
     sleepTimeout = timedelta(seconds=15)
     if (update.message.date.astimezone(timezone.utc) + sleepTimeout < datetime.now(timezone.utc)):
