@@ -17,8 +17,6 @@ KEY_PATH = os.getenv('KEY_PATH')
 CERT_PATH = os.getenv('CERT_PATH')
 PING_URL = os.getenv('PING_URL')
 
-botStatus = botInfo()
-
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
 )
@@ -27,7 +25,6 @@ logger = logging.getLogger(__name__)
 botNotes = json.loads(open("bot-text-messages.json", "r").read())
 
 async def start(update: Update, context: CallbackContext) -> None:
-    botStatus.logEvent()
     await update.message.reply_text(botNotes["startMessage"].format(update.effective_user.first_name))
 
 async def healthPing(context: CallbackContext):
