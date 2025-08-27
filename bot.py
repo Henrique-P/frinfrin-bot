@@ -1,11 +1,9 @@
 import logging
-from datetime import timedelta, datetime, timezone
 import requests
 from telegram import Update
 from telegram.ext import CommandHandler, InlineQueryHandler, CallbackContext, Application, MessageHandler, filters
 import os
 import dotenv
-from botInfo import botInfo
 import embed
 import json
 
