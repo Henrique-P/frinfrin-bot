@@ -22,7 +22,7 @@ PING_URL = os.getenv('PING_URL')
 botStatus = botInfo()
 
 logging.basicConfig(
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.WARN
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
 )
 logger = logging.getLogger(__name__)
 
@@ -30,22 +30,10 @@ botNotes = json.loads(open("bot-text-messages.json", "r").read())
 
 async def start(update: Update, context: CallbackContext) -> None:
     botStatus.logEvent()
-    await wasBotSleeping(update)
     await update.message.reply_text(botNotes["startMessage"].format(update.effective_user.first_name))
-
-async def log(update: Update, context: CallbackContext) -> None:
-    response = botStatus.getFormattedStatistics()
-    await update.message.reply_text(response)
 
 async def healthPing(context: CallbackContext):
     requests.get(PING_URL, timeout=1)
-
-async def wasBotSleeping(update: Update):
-    if update.channel_post:
-        return
-    sleepTimeout = timedelta(seconds=15)
-    if (update.message.date.astimezone(timezone.utc) + sleepTimeout < datetime.now(timezone.utc)):
-        await update.message.reply_text(botNotes["sleepMessage"])
 
 async def removeForward(update: Update, context: CallbackContext):
     if (update.channel_post.forward_origin.type in ['user', 'hidden_user']):
@@ -57,7 +45,6 @@ def main() -> None:
     if PING_URL:
         application.job_queue.run_repeating(healthPing, interval=60, first=10)
     application.add_handler(CommandHandler("start", start))
-    application.add_handler(CommandHandler("log", log))
     application.add_handler(MessageHandler(filters.Regex(r'\b(twitter|x)\.com/.+/status/\d+') & filters.TEXT & ~filters.COMMAND, embed.twitter))
     application.add_handler(MessageHandler(filters.Regex(r'\btiktok\.com/.+') & filters.TEXT & ~filters.COMMAND, embed.tiktok))
     application.add_handler(MessageHandler(filters.Regex(r'\bbsky\.app/profile/.+') & filters.TEXT & ~filters.COMMAND, embed.bsky))
